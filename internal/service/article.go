@@ -7,37 +7,37 @@ import (
 )
 
 type ArticlesService struct {
-	articlesRepo *repo.ArticlesRepository
-	chaptersRepo *repo.ChaptersRepository
-	infoBoxRepo *repo.InfoBoxesRepository
+	articlesRepo repo.Articles
+	chaptersRepo repo.Chapters
+	infoBoxRepo repo.InfoBox
 }
 
-func NewArticlesService(articlesRepo *repo.ArticlesRepository, chaptersRepo *repo.ChaptersRepository, infoBoxRepo *repo.InfoBoxesRepository) *ArticlesService{
-	return &ArticlesService{articlesRepo, chaptersRepo, infoBoxRepo}
+func NewArticlesService(articles repo.Articles, chapters repo.Chapters, infoBox repo.InfoBox) *ArticlesService{
+	return &ArticlesService{articles, chapters, infoBox}
 }
 func (s *ArticlesService) LoadArticlesBriefInfo(ctx context.Context) ([]model.ArticleBriefInfo, error){
 	return s.articlesRepo.GetArticlesBriefInfo(ctx)
 }
-func (s *ArticlesService)LoadArticle(ctx context.Context, articleID int) (*model.ArticlePage, error){
+func (s *ArticlesService)LoadArticle(ctx context.Context, title string) (*model.ArticlePage, error){
 	var article model.Article
 	var chapters []model.Chapter
 	var infoBox model.InfoBox
 
-	infoType, ObjectInfoBoxID, err := s.infoBoxRepo.GetTypeAndObjectInfoBoxByArticleID(ctx, articleID)
+	article, err := s.articlesRepo.GetArticleByTitle(ctx, title)
+	if err != nil{
+		return nil, err
+	}
+
+	infoType, ObjectInfoBoxID, err := s.infoBoxRepo.GetTypeAndObjectInfoBoxByArticleID(ctx, article.ID)
     if err != nil {
         return nil, err
     }
-	infoBox, err = s.infoBoxRepo.GetInfoBoxByObjectInfoBoxIDAndType(ctx, ObjectInfoBoxID,infoType)
+	infoBox, err = s.infoBoxRepo.GetInfoBoxByObjectInfoBoxIDAndType(ctx, ObjectInfoBoxID, infoType)
 	if err != nil{
 		return nil, err
 	}
 
-	article, err = s.articlesRepo.GetArticleByID(ctx, articleID)
-	if err != nil{
-		return nil, err
-	}
-
-	chapters, err = s.chaptersRepo.GetChaptersByArticleID(ctx, articleID)
+	chapters, err = s.chaptersRepo.GetChaptersByArticleID(ctx, article.ID)
 	if err != nil{
 		return nil, err
 	}

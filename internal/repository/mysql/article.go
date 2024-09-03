@@ -23,9 +23,9 @@ func (r *ArticlesRepository)GetArticlesBriefInfo(ctx context.Context) ([]model.A
 	}
 	return articlesBriefInfo, nil
 }	
-func(r *ArticlesRepository)GetArticleByID(ctx context.Context, articleID int) (model.Article, error){
+func(r *ArticlesRepository)GetArticleByTitle(ctx context.Context, title string) (model.Article, error){
 	var article model.Article
-	err:= r.db.Get(&article, "SELECT * FROM articles WHERE article_id = $1", articleID)
+	err:= r.db.Get(&article, "SELECT * FROM articles WHERE title = $1", title)
 	if err != nil{
 		return article, err
 	}

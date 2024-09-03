@@ -2,6 +2,7 @@ package v1
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,13 +10,15 @@ import (
 func (h *Handler) initArticlesRoutes(router *gin.RouterGroup){
 	article:= router.Group("/articles")
 	{
-		article.GET("/:id", h.LoadArticle)
+		article.GET("/:title", h.LoadArticle)
 		article.GET("", h.LoadArticlesBriefInfo)
 	}
 }
 
 func (h *Handler) LoadArticle(c *gin.Context){
-	articlePage, err:= h.services.Articles.LoadArticle(c.Request.Context(), 12)
+	title:= c.Param("title")
+	title = strings.Replace(title, "_", "", -1)
+	articlePage, err:= h.services.Articles.LoadArticle(c.Request.Context(), title)
 	if err != nil{
 		newResponse(c, http.StatusInternalServerError, err.Error())
 		return

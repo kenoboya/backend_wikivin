@@ -43,7 +43,7 @@ func unmarshal(config *Config) error{
 }
 
 func setFromEnv(config *Config) error{
-	if err:= gotenv.Load("../../.env"); err != nil{
+	if err:= gotenv.Load("/root/.env"); err != nil{
 		return err
 	}
 	
