@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 const (
@@ -19,10 +20,147 @@ const (
     Country           = "country"
     University        = "university"
     Museum            = "museum"
-    PoliticalPosition = "politicalPosition"
+    PoliticalPosition = "political"
 )
 
 var infoBoxFactories map[string]func() InfoBox
+
+
+type PersonInfoBox struct {
+    FullName         *string `json:"full_name"`
+    BirthDate        *time.Time `json:"birth_date"`
+    PlaceOfBirth     *string `json:"place_of_birth"`
+    Nationality      *string `json:"nationality"`
+    DeathDate        *time.Time `json:"death_date"`
+    Educations        *string `json:"educations"`
+    Occupations       *string `json:"occupations"`
+    Parents          *string `json:"parents"`
+    Children        *string `json:"children"`
+}
+
+type BuildingInfoBox struct {
+    FullName         *string `json:"full_name"`
+    Location         *string `json:"location"`
+    Founded          *time.Time `json:"founded"`
+    Architects        *string `json:"architects"`
+    Height           *int    `json:"height"`
+    Floors           *int    `json:"floors"`
+    Usage            *string `json:"usage"`
+}
+
+type CompanyInfoBox struct {
+    FullName         *string `json:"full_name"`
+    Founded          *time.Time `json:"founded"`
+    Industry         *string `json:"industry"`
+    Headquarters     *string `json:"headquarters"`
+    CEO              *string `json:"ceo"`
+    Revenue          *string `json:"revenue"`
+    Employees        *int    `json:"employees"`
+}
+
+type EventInfoBox struct {
+    Title            *string `json:"title"`
+    Date             *time.Time `json:"date"`
+    Locations         *string `json:"locations"`
+    // Description      *string `json:"description"`
+    Organizers        *string `json:"organizers"`
+    Attendance       *int    `json:"attendance"`
+    // Type             *string `json:"type"`
+}
+
+type FilmInfoBox struct {
+    Title            *string `json:"title"`
+    ReleaseDate      *time.Time `json:"release_date"`
+    Director         *string `json:"director"`
+    Genre            *string `json:"genre"`
+        Duration         *time.Duration    `json:"duration"`
+    Languages         *string `json:"language"`
+    Rating           *float32 `json:"rating"` // It will be seperate class for rating (Rotten, imdb, ...)
+}
+
+type BookInfoBox struct {
+    Title            *string `json:"title"`
+    Authors           *string `json:"authors"`
+    PublishDate      *time.Time `json:"publish_date"`
+    Genre            *string `json:"genre"`
+    ISBN             *string `json:"isbn"`
+    Pages            *int    `json:"pages"`
+    Publisher        *string `json:"publisher"`
+}
+
+type AlbumInfoBox struct {
+    Title            *string   `json:"title"`
+    Artists           *string   `json:"artists"`
+    ReleaseDate      *time.Time   `json:"release_date"`
+    Genre            *string   `json:"genre"`
+    Label            *string   `json:"label"`
+    Tracks           *string `json:"tracks"`
+}
+
+type AnimalInfoBox struct {
+    FullName         *string `json:"full_name"`
+    Species          *string `json:"species"`
+    Habitat          *string `json:"habitat"`
+    ConservationStatus *bool `json:"conservation_status"`
+    Lifespan         *string `json:"lifespan"`
+}
+
+type AwardInfoBox struct {
+    FullName         *string `json:"full_name"`
+    Year             *time.Time    `json:"year"`
+    Category         *string `json:"category"`
+    Recipients        *string `json:"recipients"`
+    Organizations     *string `json:"organizations"`
+}
+
+type SongInfoBox struct {
+    Title            *string `json:"title"`
+    // In the future, i can added classes: artist, album, etc...
+    Artists           *string `json:"artists"`
+    Album            *string `json:"album"`
+    ReleaseDate      *time.Time `json:"release_date"`
+    Genre            *string `json:"genre"`
+    Duration         *time.Duration    `json:"duration"`
+    Label            *string `json:"label"`
+}
+
+type CountryInfoBox struct {
+    FullName         *string `json:"full_name"`
+    Capital          *string  `json:"capital"`
+    Population       *int     `json:"population"`
+    Region           *string  `json:"region"`
+    Area             *float64 `json:"area"`
+    Currency         *string  `json:"currency"`
+    OfficialLanguage *string  `json:"official_language"`
+}
+
+type UniversityInfoBox struct {
+    FullName         *string `json:"full_name"`
+    Founded          *time.Time   `json:"founded"`
+    Location         *string   `json:"location"`
+    Programs         *string `json:"programs"`
+    Enrollment       *int      `json:"enrollment"`
+    Affiliation      *string   `json:"affiliation"`
+    Accreditation    *string   `json:"accreditation"`
+}
+
+type MuseumInfoBox struct {
+    FullName         *string `json:"full_name"`
+    Location         *string   `json:"location"`
+    Established      *time.Time   `json:"established"`
+    Collections      *string `json:"collections"`
+    Director         *string   `json:"director"`
+    Exhibitions      *string `json:"exhibitions"`
+}
+
+type PoliticalPositionInfoBox struct {
+    Position         *string `json:"position"`
+    OfficeHolder     *string `json:"office_holder"`
+    TermStart        *time.Time `json:"term_start"`
+    TermEnd          *time.Time `json:"term_end"`
+    Party            *string `json:"party"`
+    Constituency     *string `json:"constituency"`
+}
 
 func init(){
     if infoBoxFactories == nil{
@@ -58,8 +196,6 @@ type InfoBox interface {
     ToJSON() (string, error)
 }
 
-type PersonInfoBox struct {
-}
 
 func (p *PersonInfoBox) GetType() string {
     return Person
@@ -73,8 +209,6 @@ func (p *PersonInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type BuildingInfoBox struct {
-}
 
 func (b *BuildingInfoBox) GetType() string {
     return Building
@@ -88,8 +222,6 @@ func (b *BuildingInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type CompanyInfoBox struct {
-}
 
 func (c *CompanyInfoBox) GetType() string {
     return Company
@@ -103,8 +235,6 @@ func (c *CompanyInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type EventInfoBox struct {
-}
 
 func (e *EventInfoBox) GetType() string {
     return Event
@@ -118,8 +248,6 @@ func (e *EventInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type FilmInfoBox struct {
-}
 
 func (f *FilmInfoBox) GetType() string {
     return Film
@@ -133,8 +261,6 @@ func (f *FilmInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type BookInfoBox struct {
-}
 
 func (b *BookInfoBox) GetType() string {
     return Book
@@ -148,8 +274,6 @@ func (b *BookInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type AlbumInfoBox struct {
-}
 
 func (a *AlbumInfoBox) GetType() string {
     return Album
@@ -163,8 +287,6 @@ func (a *AlbumInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type AnimalInfoBox struct {
-}
 
 func (a *AnimalInfoBox) GetType() string {
     return Animal
@@ -178,8 +300,6 @@ func (a *AnimalInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type AwardInfoBox struct {
-}
 
 func (a *AwardInfoBox) GetType() string {
     return Award
@@ -193,8 +313,6 @@ func (a *AwardInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type SongInfoBox struct {
-}
 
 func (s *SongInfoBox) GetType() string {
     return Song
@@ -208,8 +326,6 @@ func (s *SongInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type CountryInfoBox struct {
-}
 
 func (c *CountryInfoBox) GetType() string {
     return Country
@@ -223,8 +339,6 @@ func (c *CountryInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type UniversityInfoBox struct {
-}
 
 func (u *UniversityInfoBox) GetType() string {
     return University
@@ -238,8 +352,6 @@ func (u *UniversityInfoBox) ToJSON() (string, error) {
     return string(data), nil
 }
 
-type MuseumInfoBox struct {
-}
 
 func (m *MuseumInfoBox) GetType() string {
     return Museum
@@ -251,9 +363,6 @@ func (m *MuseumInfoBox) ToJSON() (string, error) {
         return "", err
     }
     return string(data), nil
-}
-
-type PoliticalPositionInfoBox struct {
 }
 
 func (p *PoliticalPositionInfoBox) GetType() string {
