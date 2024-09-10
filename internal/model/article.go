@@ -6,15 +6,9 @@ type ArticlePage struct {
 	InfoBox  InfoBox
 }
 
-type ArticleBriefInfo struct {
+type Article struct {
 	ID          int
 	Title       string
 	LeadSection string
 	Image       string
-}
-
-type Article struct {
-	ArticleBriefInfo
-	InfoBoxID  int
-	ChaptersID []int
 }

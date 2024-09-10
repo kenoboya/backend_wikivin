@@ -27,140 +27,138 @@ var infoBoxFactories map[string]func() InfoBox
 
 
 type PersonInfoBox struct {
-    FullName         *string `json:"full_name"`
-    BirthDate        *time.Time `json:"birth_date"`
-    PlaceOfBirth     *string `json:"place_of_birth"`
-    Nationality      *string `json:"nationality"`
-    DeathDate        *time.Time `json:"death_date"`
-    Educations        *string `json:"educations"`
-    Occupations       *string `json:"occupations"`
-    Parents          *string `json:"parents"`
-    Children        *string `json:"children"`
+    FullName         *string    `json:"full_name" db:"full_name"`
+    BirthDate        *time.Time `json:"birth_date" db:"birth_date"`
+    PlaceOfBirth     *string    `json:"place_of_birth" db:"place_of_birth"`
+    Nationality      *string    `json:"nationality" db:"nationality"`
+    DeathDate        *time.Time `json:"death_date" db:"death_date"`
+    Educations       *string    `json:"educations" db:"educations"`
+    Occupations      *string    `json:"occupations" db:"occupations"`
+    Parents          *string    `json:"parents" db:"parents"`
+    Children         *string    `json:"children" db:"children"`
 }
 
 type BuildingInfoBox struct {
-    FullName         *string `json:"full_name"`
-    Location         *string `json:"location"`
-    Founded          *time.Time `json:"founded"`
-    Architects        *string `json:"architects"`
-    Height           *int    `json:"height"`
-    Floors           *int    `json:"floors"`
-    Usage            *string `json:"usage"`
+    FullName         *string    `json:"full_name" db:"full_name"`
+    Location         *string    `json:"location" db:"location"`
+    Founded          *time.Time `json:"founded" db:"founded"`
+    Architects       *string    `json:"architects" db:"architects"`
+    Height           *int       `json:"height" db:"height"`
+    Floors           *int       `json:"floors" db:"floors"`
+    Usage            *string    `json:"usage" db:"usage"`
 }
 
 type CompanyInfoBox struct {
-    FullName         *string `json:"full_name"`
-    Founded          *time.Time `json:"founded"`
-    Industry         *string `json:"industry"`
-    Headquarters     *string `json:"headquarters"`
-    CEO              *string `json:"ceo"`
-    Revenue          *string `json:"revenue"`
-    Employees        *int    `json:"employees"`
+    FullName         *string    `json:"full_name" db:"full_name"`
+    Founded          *time.Time `json:"founded" db:"founded"`
+    Industry         *string    `json:"industry" db:"industry"`
+    Headquarters     *string    `json:"headquarters" db:"headquarters"`
+    CEO              *string    `json:"ceo" db:"ceo"`
+    Revenue          *string    `json:"revenue" db:"revenue"`
+    Employees        *int       `json:"employees" db:"employees"`
 }
 
 type EventInfoBox struct {
-    Title            *string `json:"title"`
-    Date             *time.Time `json:"date"`
-    Locations         *string `json:"locations"`
-    // Description      *string `json:"description"`
-    Organizers        *string `json:"organizers"`
-    Attendance       *int    `json:"attendance"`
-    // Type             *string `json:"type"`
+    Title            *string    `json:"title" db:"title"`
+    Date             *time.Time `json:"date" db:"date"`
+    Locations        *string    `json:"locations" db:"locations"`
+    Organizers       *string    `json:"organizers" db:"organizers"`
+    Attendance       *int       `json:"attendance" db:"attendance"`
 }
 
 type FilmInfoBox struct {
-    Title            *string `json:"title"`
-    ReleaseDate      *time.Time `json:"release_date"`
-    Director         *string `json:"director"`
-    Genre            *string `json:"genre"`
-        Duration         *time.Duration    `json:"duration"`
-    Languages         *string `json:"language"`
-    Rating           *float32 `json:"rating"` // It will be seperate class for rating (Rotten, imdb, ...)
+    Title            *string       `json:"title" db:"title"`
+    ReleaseDate      *time.Time    `json:"release_date" db:"release_date"`
+    Director         *string       `json:"director" db:"director"`
+    Genre            *string       `json:"genre" db:"genre"`
+    Duration         *time.Duration `json:"duration" db:"duration"`
+    Languages        *string       `json:"language" db:"language"`
+    Rating           *float32      `json:"rating" db:"rating"`
 }
 
 type BookInfoBox struct {
-    Title            *string `json:"title"`
-    Authors           *string `json:"authors"`
-    PublishDate      *time.Time `json:"publish_date"`
-    Genre            *string `json:"genre"`
-    ISBN             *string `json:"isbn"`
-    Pages            *int    `json:"pages"`
-    Publisher        *string `json:"publisher"`
+    Title            *string    `json:"title" db:"title"`
+    Authors          *string    `json:"authors" db:"authors"`
+    PublishDate      *time.Time `json:"publish_date" db:"publish_date"`
+    Genre            *string    `json:"genre" db:"genre"`
+    ISBN             *string    `json:"isbn" db:"isbn"`
+    Pages            *int       `json:"pages" db:"pages"`
+    Publisher        *string    `json:"publisher" db:"publisher"`
 }
 
 type AlbumInfoBox struct {
-    Title            *string   `json:"title"`
-    Artists           *string   `json:"artists"`
-    ReleaseDate      *time.Time   `json:"release_date"`
-    Genre            *string   `json:"genre"`
-    Label            *string   `json:"label"`
-    Tracks           *string `json:"tracks"`
+    Title            *string    `json:"title" db:"title"`
+    Artists          *string    `json:"artists" db:"artists"`
+    ReleaseDate      *time.Time `json:"release_date" db:"release_date"`
+    Genre            *string    `json:"genre" db:"genre"`
+    Label            *string    `json:"label" db:"label"`
+    Tracks           *string    `json:"tracks" db:"tracks"`
 }
 
 type AnimalInfoBox struct {
-    FullName         *string `json:"full_name"`
-    Species          *string `json:"species"`
-    Habitat          *string `json:"habitat"`
-    ConservationStatus *bool `json:"conservation_status"`
-    Lifespan         *string `json:"lifespan"`
+    FullName         *string `json:"full_name" db:"full_name"`
+    Species          *string `json:"species" db:"species"`
+    Habitat          *string `json:"habitat" db:"habitat"`
+    ConservationStatus *bool  `json:"conservation_status" db:"conservation_status"`
+    Lifespan         *string `json:"lifespan" db:"lifespan"`
 }
 
 type AwardInfoBox struct {
-    FullName         *string `json:"full_name"`
-    Year             *time.Time    `json:"year"`
-    Category         *string `json:"category"`
-    Recipients        *string `json:"recipients"`
-    Organizations     *string `json:"organizations"`
+    FullName         *string    `json:"full_name" db:"full_name"`
+    Year             *time.Time `json:"year" db:"year"`
+    Category         *string    `json:"category" db:"category"`
+    Recipients       *string    `json:"recipients" db:"recipients"`
+    Organizations    *string    `json:"organizations" db:"organizations"`
 }
 
 type SongInfoBox struct {
-    Title            *string `json:"title"`
-    // In the future, i can added classes: artist, album, etc...
-    Artists           *string `json:"artists"`
-    Album            *string `json:"album"`
-    ReleaseDate      *time.Time `json:"release_date"`
-    Genre            *string `json:"genre"`
-    Duration         *time.Duration    `json:"duration"`
-    Label            *string `json:"label"`
+    Title            *string       `json:"title" db:"title"`
+    Artists          *string       `json:"artists" db:"artists"`
+    Album            *string       `json:"album" db:"album"`
+    ReleaseDate      *time.Time    `json:"release_date" db:"release_date"`
+    Genre            *string       `json:"genre" db:"genre"`
+    Duration         *time.Duration `json:"duration" db:"duration"`
+    Label            *string       `json:"label" db:"label"`
 }
 
 type CountryInfoBox struct {
-    FullName         *string `json:"full_name"`
-    Capital          *string  `json:"capital"`
-    Population       *int     `json:"population"`
-    Region           *string  `json:"region"`
-    Area             *float64 `json:"area"`
-    Currency         *string  `json:"currency"`
-    OfficialLanguage *string  `json:"official_language"`
+    FullName         *string    `json:"full_name" db:"full_name"`
+    Capital          *string    `json:"capital" db:"capital"`
+    Population       *int       `json:"population" db:"population"`
+    Region           *string    `json:"region" db:"region"`
+    Area             *float64   `json:"area" db:"area"`
+    Currency         *string    `json:"currency" db:"currency"`
+    OfficialLanguage *string    `json:"official_language" db:"official_language"`
 }
 
 type UniversityInfoBox struct {
-    FullName         *string `json:"full_name"`
-    Founded          *time.Time   `json:"founded"`
-    Location         *string   `json:"location"`
-    Programs         *string `json:"programs"`
-    Enrollment       *int      `json:"enrollment"`
-    Affiliation      *string   `json:"affiliation"`
-    Accreditation    *string   `json:"accreditation"`
+    FullName         *string    `json:"full_name" db:"full_name"`
+    Founded          *time.Time `json:"founded" db:"founded"`
+    Location         *string    `json:"location" db:"location"`
+    Programs         *string    `json:"programs" db:"programs"`
+    Enrollment       *int       `json:"enrollment" db:"enrollment"`
+    Affiliation      *string    `json:"affiliation" db:"affiliation"`
+    Accreditation    *string    `json:"accreditation" db:"accreditation"`
 }
 
 type MuseumInfoBox struct {
-    FullName         *string `json:"full_name"`
-    Location         *string   `json:"location"`
-    Established      *time.Time   `json:"established"`
-    Collections      *string `json:"collections"`
-    Director         *string   `json:"director"`
-    Exhibitions      *string `json:"exhibitions"`
+    FullName         *string    `json:"full_name" db:"full_name"`
+    Location         *string    `json:"location" db:"location"`
+    Established      *time.Time `json:"established" db:"established"`
+    Collections      *string    `json:"collections" db:"collections"`
+    Director         *string    `json:"director" db:"director"`
+    Exhibitions      *string    `json:"exhibitions" db:"exhibitions"`
 }
 
 type PoliticalPositionInfoBox struct {
-    Position         *string `json:"position"`
-    OfficeHolder     *string `json:"office_holder"`
-    TermStart        *time.Time `json:"term_start"`
-    TermEnd          *time.Time `json:"term_end"`
-    Party            *string `json:"party"`
-    Constituency     *string `json:"constituency"`
+    Position         *string    `json:"position" db:"position"`
+    OfficeHolder     *string    `json:"office_holder" db:"office_holder"`
+    TermStart        *time.Time `json:"term_start" db:"term_start"`
+    TermEnd          *time.Time `json:"term_end" db:"term_end"`
+    Party            *string    `json:"party" db:"party"`
+    Constituency     *string    `json:"constituency" db:"constituency"`
 }
+
 
 func init(){
     if infoBoxFactories == nil{
@@ -189,6 +187,11 @@ func GetInfoBoxFactory(infoBoxType string) (func() InfoBox, error) {
         return nil, fmt.Errorf("unknown infoBoxType: %s", infoBoxType)
     }
     return factory, nil
+}
+
+type InfoBoxDB struct{
+    InfoBoxType string
+    InfoBox InfoBox
 }
 
 type InfoBox interface {

@@ -22,7 +22,8 @@ func NewRepositories(db *sqlx.DB) *Repositories{
 }
 
 type Articles interface {
-	GetArticlesBriefInfo(ctx context.Context) ([]model.ArticleBriefInfo, error)
+	Create(ctx context.Context, article model.Article) (int, error)
+	GetArticles(ctx context.Context) ([]model.Article, error)
 	GetArticleByTitle(ctx context.Context, title string) (model.Article, error)
 }
 
@@ -31,6 +32,8 @@ type Chapters interface {
 }
 
 type InfoBox interface{
+	Create(ctx context.Context, articleID int, infoBoxID int) error
+	CreateInfoBoxByType(ctx context.Context, infoBoxDB model.InfoBoxDB) (int, error)
 	GetTypeAndObjectInfoBoxByArticleID(ctx context.Context, articleID int) (string, int, error)
 	GetInfoBoxByObjectInfoBoxIDAndType(ctx context.Context, ObjectInfoBoxID int, infoBoxType string) (model.InfoBox, error)
 }

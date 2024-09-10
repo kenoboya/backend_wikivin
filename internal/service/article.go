@@ -15,8 +15,26 @@ type ArticlesService struct {
 func NewArticlesService(articles repo.Articles, chapters repo.Chapters, infoBox repo.InfoBox) *ArticlesService{
 	return &ArticlesService{articles, chapters, infoBox}
 }
-func (s *ArticlesService) LoadArticlesBriefInfo(ctx context.Context) ([]model.ArticleBriefInfo, error){
-	return s.articlesRepo.GetArticlesBriefInfo(ctx)
+
+func (s *ArticlesService) CreateArticle(ctx context.Context, infoBoxDB model.InfoBoxDB,  article model.Article) error{
+	articleID, err:= s.articlesRepo.Create(ctx, article); 
+	if err != nil{
+		return err;
+	}
+	infoBoxID, err:= s.infoBoxRepo.CreateInfoBoxByType(ctx, infoBoxDB)
+	if err != nil{
+		return err;
+	}
+	if err:= s.infoBoxRepo.Create(ctx,articleID, infoBoxID); err!= nil{
+		return err;
+	}
+
+	// chapters
+	return nil
+}
+
+func (s *ArticlesService) LoadArticles(ctx context.Context) ([]model.Article, error){
+	return s.articlesRepo.GetArticles(ctx)
 }
 func (s *ArticlesService)LoadArticle(ctx context.Context, title string) (*model.ArticlePage, error){
 	var article model.Article

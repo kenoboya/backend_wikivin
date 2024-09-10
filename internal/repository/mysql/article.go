@@ -14,14 +14,28 @@ type ArticlesRepository struct {
 func NewArticlesRepository (db *sqlx.DB) *ArticlesRepository{
 	return &ArticlesRepository{db}
 }
-func (r *ArticlesRepository)GetArticlesBriefInfo(ctx context.Context) ([]model.ArticleBriefInfo, error){
-	var articlesBriefInfo []model.ArticleBriefInfo
-	query:= "SELECT title, lead_section, image FROM articles"
-	err:= r.db.Select(&articlesBriefInfo, query)
+
+func (r *ArticlesRepository) Create(ctx context.Context,article model.Article) (int, error) {
+    var id int
+
+    query := `INSERT INTO articles (title, lead_section, image) VALUES (:title, :lead_section, :image) RETURNING article_id`
+    row := r.db.QueryRow(query, article)
+
+    if err := row.Scan(&id); err != nil {
+        return -1, err
+    }
+
+    return id, nil
+}
+
+func (r *ArticlesRepository)GetArticles(ctx context.Context) ([]model.Article, error){
+	var articles []model.Article
+	query:= "SELECT article_id,title, lead_section, image FROM articles"
+	err:= r.db.Select(&articles, query)
 	if err!= nil{
-		return articlesBriefInfo, err
+		return articles, err
 	}
-	return articlesBriefInfo, nil
+	return articles, nil
 }	
 func(r *ArticlesRepository)GetArticleByTitle(ctx context.Context, title string) (model.Article, error){
 	var article model.Article

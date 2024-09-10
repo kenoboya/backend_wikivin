@@ -17,6 +17,7 @@ func NewServices(repo *repo.Repositories)*Services{
 }
 
 type Articles interface {
-	LoadArticlesBriefInfo(ctx context.Context) ([]model.ArticleBriefInfo, error)
+	CreateArticle(ctx context.Context, infoBoxDB model.InfoBoxDB,article model.Article) error
+	LoadArticles(ctx context.Context) ([]model.Article, error)
 	LoadArticle(ctx context.Context, title string) (*model.ArticlePage, error)
 }
