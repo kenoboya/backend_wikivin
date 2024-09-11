@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "a409a026-c346-4404-8f7e-b56be9633797",
+		"name": "backend_wikivin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34534873"
+	},
+	"item": [
+		{
+			"name": "Article",
+			"item": [
+				{
+					"name": "LoadArticlesBriefInfo",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "LoadArticle",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "CreateArticle",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Article\": {\r\n    \"Title\": \"How to\",\r\n    \"LeadSection\": \"In this article, we will explore how to create and use data structures in the Go language.\",\r\n    \"Image\": \"https://example.com/image.jpg\"\r\n  },\r\n  \"Chapters\": [\r\n    {\r\n      \"Name\": \"Introduction\",\r\n      \"Content\": \"In this section, we will discuss the basic concepts...\",\r\n      \"Child\": [\r\n        {\r\n          \"Name\": \"Basic Concepts\",\r\n          \"Content\": \"Basic concepts that we will use in the article...\",\r\n          \"Child\": [\r\n            {\r\n              \"Name\": \"Data Types\",\r\n              \"Content\": \"Data types used in the language...\",\r\n              \"Child\": []\r\n            }\r\n          ]\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"Name\": \"Syntax Basics\",\r\n      \"Content\": \"Overview of the Go language syntax...\",\r\n      \"Child\": [\r\n        {\r\n          \"Name\": \"Variables and Constants\",\r\n          \"Content\": \"How to declare variables and constants in Go...\",\r\n          \"Child\": []\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"person\": {\r\n    \"FullName\": \"Ivan Ivanovich Ivanov\",\r\n    \"BirthDate\": \"1980-01-01T00:00:00Z\",\r\n    \"PlaceOfBirth\": \"Moscow, Russia\",\r\n    \"Nationality\": \"Russian\",\r\n    \"DeathDate\": null,\r\n    \"Educations\": \"Moscow State University, Faculty of Mathematics\",\r\n    \"Occupations\": \"Programmer, Professor of Mathematics\",\r\n    \"Parents\": \"Petr Ivanovich Ivanov, Anna Petrovna Ivanova\",\r\n    \"Children\": \"Sergey Ivanov, Maria Ivanova\"\r\n  },\r\n  \"InfoBoxType\": \"person\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/articles/create",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"articles",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:8080"
+		}
+	]
+}
