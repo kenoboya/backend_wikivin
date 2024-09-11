@@ -52,7 +52,7 @@ func (h *Handler) CreateArticle(c *gin.Context){
 	var article model.Article
     articleData, ok := raw["article"].(map[string]interface{})
     if !ok {
-        newResponse(c, http.StatusBadRequest, "Invalid article data")
+        newResponse(c, http.StatusBadRequest, model.ErrArticleData.Error())
         return
     }
     articleBytes, err := json.Marshal(articleData)
@@ -64,9 +64,26 @@ func (h *Handler) CreateArticle(c *gin.Context){
         newResponse(c, http.StatusBadRequest, err.Error())
         return
     }
-	// chapters
-	if err:= h.services.Articles.CreateArticle(c.Request.Context(), infoBoxDB, article); err!= nil{
+
+	var chapters []model.Chapter
+	chaptersData, ok := raw["article"].(map[string]interface{})
+	if !ok {
+		newResponse(c, http.StatusBadRequest, model.ErrChapterData.Error())
+		return
+	}
+	chaptersBytes, err:= json.Marshal(chaptersData)
+	if err != nil{
+		newResponse(c, http.StatusBadRequest, err.Error())
+        return
+	}
+	if err:= json.Unmarshal(chaptersBytes, &chapters); err != nil{
+		newResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err:= h.services.Articles.CreateArticle(c.Request.Context(), infoBoxDB, article, chapters); err!= nil{
 		newResponse(c, http.StatusInternalServerError, err.Error())
+		return
 	}
 }
 

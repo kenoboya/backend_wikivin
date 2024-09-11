@@ -28,6 +28,7 @@ type Articles interface {
 }
 
 type Chapters interface {
+	Create(ctx context.Context, chapter model.Chapter) error 
 	GetChaptersByArticleID(ctx context.Context, articleID int) ([]model.Chapter, error)
 }
 

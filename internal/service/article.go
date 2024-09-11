@@ -16,7 +16,7 @@ func NewArticlesService(articles repo.Articles, chapters repo.Chapters, infoBox 
 	return &ArticlesService{articles, chapters, infoBox}
 }
 
-func (s *ArticlesService) CreateArticle(ctx context.Context, infoBoxDB model.InfoBoxDB,  article model.Article) error{
+func (s *ArticlesService) CreateArticle(ctx context.Context, infoBoxDB model.InfoBoxDB,  article model.Article, chapters []model.Chapter) error{
 	articleID, err:= s.articlesRepo.Create(ctx, article); 
 	if err != nil{
 		return err;
@@ -29,7 +29,15 @@ func (s *ArticlesService) CreateArticle(ctx context.Context, infoBoxDB model.Inf
 		return err;
 	}
 
-	// chapters
+	chapters, err = unbuildHierarchy(chapters)
+	if err!= nil{
+		return err
+	}
+	for _, chapter:= range chapters{
+		if err:= s.chaptersRepo.Create(ctx, chapter); err!= nil{
+			return err
+		}
+	}
 	return nil
 }
 
@@ -71,6 +79,37 @@ func (s *ArticlesService)LoadArticle(ctx context.Context, title string) (*model.
 		}, nil
 }
 
+func unbuildHierarchy(roots []model.Chapter) ([]model.Chapter, error) {
+    var chapters []model.Chapter
+
+    convertToPointers := func(chaptersList []model.Chapter) []*model.Chapter {
+        var pointers []*model.Chapter
+        for i := range chaptersList {
+            pointers = append(pointers, &chaptersList[i])
+        }
+        return pointers
+    }
+
+    pointers := convertToPointers(roots)
+
+    var collectChapters func([]*model.Chapter) error
+    collectChapters = func(chaptersList []*model.Chapter) error {
+        for _, ch := range chaptersList {
+            chapters = append(chapters, *ch)
+            if ch.Child != nil {
+                if err := collectChapters(ch.Child); err != nil {
+                    return err
+                }
+            }
+        }
+        return nil
+    }
+
+    if err := collectChapters(pointers); err != nil {
+        return nil, err
+    }
+    return chapters, nil
+}
 
 func buildHierarchy(chapters []model.Chapter) ([]model.Chapter, error){
 	chapterMap := make(map[int]*model.Chapter)
