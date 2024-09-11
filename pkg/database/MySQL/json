@@ -1,0 +1,49 @@
+{
+  "Article": {
+    "Title": "Title first",
+    "LeadSection": "In this article, we will explore how to create and use data structures in the Go language.",
+    "Image": "https://example.com/image.jpg"
+  },
+  "Chapters": [
+    {
+      "Name": "Introduction",
+      "Content": "INTRODUCTION",
+      "Child": [
+        {
+          "Name": "Basic Concepts",
+          "Content": "BASIC CONCEPTS",
+          "Child": [
+            {
+              "Name": "Data Types",
+              "Content": "DATA TYPES",
+              "Child": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Syntax Basics",
+      "Content": "SYNTAX BASICS",
+      "Child": [
+        {
+          "Name": "Variables and Constants",
+          "Content": "VARIABLES AND CONSTANTS",
+          "Child": []
+        }
+      ]
+    }
+  ],
+  "person": {
+    "FullName": "Ivan Ivanovich Ivanov",
+    "BirthDate": "1980-01-01T00:00:00Z",
+    "PlaceOfBirth": "Moscow, Russia",
+    "Nationality": "Russian",
+    "DeathDate": null,
+    "Educations": "Moscow State University, Faculty of Mathematics",
+    "Occupations": "Programmer, Professor of Mathematics",
+    "Parents": "Petr Ivanovich Ivanov, Anna Petrovna Ivanova",
+    "Children": "Sergey Ivanov, Maria Ivanova"
+  },
+  "InfoBoxType": "person"
+}

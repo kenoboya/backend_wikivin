@@ -3,9 +3,11 @@ package repo
 import (
 	"context"
 	"fmt"
+	"log"
 	"reflect"
 	"strings"
 	"wikivin/internal/model"
+	"wikivin/pkg/logger"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -20,38 +22,42 @@ func NewInfoBoxesRepository(db *sqlx.DB) *InfoBoxesRepository{
 
 
 
-func (r *InfoBoxesRepository) Create(ctx context.Context, articleID int, infoBoxID int) error{
-	query:="INSERT INTO info_box (article_id, object_info_box_id) VALUES($1,$2)"
-	if _, err:= r.db.Exec(query, articleID, infoBoxID); err != nil{
-		return err
-	}
-	return nil
+func (r *InfoBoxesRepository) Create(ctx context.Context, articleID int, infoBoxID int) error {
+    query := "INSERT INTO info_box (article_id, object_info_box_id) VALUES (?, ?)"
+    if _, err := r.db.ExecContext(ctx, query, articleID, infoBoxID); err != nil {
+        return err
+    }
+    return nil
 }
+
 
 func (r *InfoBoxesRepository) CreateInfoBoxByType(ctx context.Context, infoBoxDB model.InfoBoxDB) (int, error) {
     columns, placeholders, values := getReflectionFieldForInfoBox(infoBoxDB.InfoBox)
 
     query := fmt.Sprintf(
-        "INSERT INTO %s_info_box (%s) VALUES (%s) RETURNING %s_info_box_id",
+        "INSERT INTO %s_info_box (%s) VALUES (%s)",
         infoBoxDB.InfoBoxType,
         strings.Join(columns, ", "),
         strings.Join(placeholders, ", "),
-        infoBoxDB.InfoBoxType,
     )
 
-    var id int
-    row := r.db.QueryRowContext(ctx, query, values...) 
-
-    if err := row.Scan(&id); err != nil {
+    result, err := r.db.ExecContext(ctx, query, values...)
+    if err != nil {
         return -1, err
     }
 
-    return id, nil
+    id, err := result.LastInsertId()
+    if err != nil {
+        return -1, err
+    }
+
+    return int(id), nil
 }
 
 
+
 func(r *InfoBoxesRepository)GetTypeAndObjectInfoBoxByArticleID(ctx context.Context, articleID int) (string, int, error){
-	query := "SELECT type, object_info_box_id FROM info_box WHERE article_id = $1"
+	query := "SELECT type, object_info_box_id FROM info_box WHERE article_id = ?"
 	var typeInfoBox string
 	var objectInfoBoxID int
 	rows, err:= r.db.Queryx(query,articleID)
@@ -74,7 +80,7 @@ func(r *InfoBoxesRepository)GetInfoBoxByObjectInfoBoxIDAndType(ctx context.Conte
 		return nil, err
 	}
 	infoBox := factory()
-	query:= fmt.Sprintf("SELECT * FROM %s_info_box WHERE %s_info_box_id = $1", infoBoxType, infoBoxType)
+	query:= fmt.Sprintf("SELECT * FROM %s_info_box WHERE %s_info_box_id = ?", infoBoxType, infoBoxType)
 	err = r.db.Get(infoBox, query, objectInfoBoxID)
 	if err!= nil{
 		return nil, err
@@ -82,9 +88,23 @@ func(r *InfoBoxesRepository)GetInfoBoxByObjectInfoBoxIDAndType(ctx context.Conte
 	return infoBox, nil
 }
 
-func getReflectionFieldForInfoBox(infoBox model.InfoBox) ([]string, []string, []interface{}){
-	val := reflect.ValueOf(infoBox).Elem()
+func getReflectionFieldForInfoBox(infoBox interface{}) ([]string, []string, []interface{}) {
+    val := reflect.ValueOf(infoBox)
     typ := val.Type()
+
+    if val.Kind() == reflect.Ptr {
+        if val.IsNil() {
+            logger.Error(model.ErrNilPointerFromReflection)
+            return nil, nil, nil
+        }
+        val = val.Elem()
+        typ = val.Type()
+    }
+
+    if val.Kind() != reflect.Struct {
+        log.Fatal("Expected struct, got:", val.Kind())
+        return nil, nil, nil
+    }
 
     var columns []string
     var placeholders []string
@@ -92,14 +112,15 @@ func getReflectionFieldForInfoBox(infoBox model.InfoBox) ([]string, []string, []
 
     for i := 0; i < val.NumField(); i++ {
         field := typ.Field(i)
-        columnName := field.Tag.Get("db") 
+        columnName := field.Tag.Get("db")
         if columnName == "" {
             continue
         }
 
         columns = append(columns, columnName)
-        placeholders = append(placeholders, fmt.Sprintf(":%s", columnName))
+        placeholders = append(placeholders, "?")
         values = append(values, val.Field(i).Interface())
     }
-	return columns, placeholders, values
+
+    return columns, placeholders, values
 }

@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS building_info_box (
     architects TEXT,
     height INT,
     floors INT,
-    usage VARCHAR(255)
+    `usage` VARCHAR(255)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS company_info_box (

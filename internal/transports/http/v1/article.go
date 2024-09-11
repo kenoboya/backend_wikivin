@@ -12,7 +12,7 @@ import (
 func (h *Handler) initArticlesRoutes(router *gin.RouterGroup){
 	article:= router.Group("/articles")
 	{
-		article.POST("", h.CreateArticle)
+		article.POST("/create", h.CreateArticle)
 		article.GET("/:title", h.LoadArticle)
 		article.GET("", h.LoadArticlesBriefInfo)
 	}
@@ -24,7 +24,7 @@ func (h *Handler) CreateArticle(c *gin.Context){
 		newResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	infoBoxType, ok := raw["infoBoxType"].(string)
+	infoBoxType, ok := raw["InfoBoxType"].(string)
 	if !ok{
 		newResponse(c, http.StatusBadRequest, model.ErrInfoBoxType.Error())
 		return
@@ -50,7 +50,7 @@ func (h *Handler) CreateArticle(c *gin.Context){
 	}
 
 	var article model.Article
-    articleData, ok := raw["article"].(map[string]interface{})
+    articleData, ok := raw["Article"].(map[string]interface{})
     if !ok {
         newResponse(c, http.StatusBadRequest, model.ErrArticleData.Error())
         return
@@ -66,7 +66,7 @@ func (h *Handler) CreateArticle(c *gin.Context){
     }
 
 	var chapters []model.Chapter
-	chaptersData, ok := raw["article"].(map[string]interface{})
+	chaptersData, ok := raw["Chapters"].([]interface{})
 	if !ok {
 		newResponse(c, http.StatusBadRequest, model.ErrChapterData.Error())
 		return
@@ -85,11 +85,12 @@ func (h *Handler) CreateArticle(c *gin.Context){
 		newResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
+	c.JSON(http.StatusOK, "Article created successfully")
 }
 
 func (h *Handler) LoadArticle(c *gin.Context){
 	title:= c.Param("title")
-	title = strings.Replace(title, "_", "", -1)
+	title = strings.Replace(title, "_", " ", -1)
 	articlePage, err:= h.services.Articles.LoadArticle(c.Request.Context(), title)
 	if err != nil{
 		newResponse(c, http.StatusInternalServerError, err.Error())

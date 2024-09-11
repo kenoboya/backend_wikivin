@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"wikivin/internal/model"
 	repo "wikivin/internal/repository/mysql"
 )
@@ -19,24 +20,17 @@ func NewArticlesService(articles repo.Articles, chapters repo.Chapters, infoBox 
 func (s *ArticlesService) CreateArticle(ctx context.Context, infoBoxDB model.InfoBoxDB,  article model.Article, chapters []model.Chapter) error{
 	articleID, err:= s.articlesRepo.Create(ctx, article); 
 	if err != nil{
-		return err;
+		return err
 	}
 	infoBoxID, err:= s.infoBoxRepo.CreateInfoBoxByType(ctx, infoBoxDB)
 	if err != nil{
-		return err;
-	}
-	if err:= s.infoBoxRepo.Create(ctx,articleID, infoBoxID); err!= nil{
-		return err;
-	}
-
-	chapters, err = unbuildHierarchy(chapters)
-	if err!= nil{
 		return err
 	}
-	for _, chapter:= range chapters{
-		if err:= s.chaptersRepo.Create(ctx, chapter); err!= nil{
-			return err
-		}
+	if err:= s.infoBoxRepo.Create(ctx,articleID, infoBoxID); err!= nil{
+		return err
+	}
+	if err:= s.unbuildHierarchyWithRequestToDB(ctx, articleID, chapters); err != nil{
+		return err
 	}
 	return nil
 }
@@ -44,7 +38,7 @@ func (s *ArticlesService) CreateArticle(ctx context.Context, infoBoxDB model.Inf
 func (s *ArticlesService) LoadArticles(ctx context.Context) ([]model.Article, error){
 	return s.articlesRepo.GetArticles(ctx)
 }
-func (s *ArticlesService)LoadArticle(ctx context.Context, title string) (*model.ArticlePage, error){
+func (s *ArticlesService) LoadArticle(ctx context.Context, title string) (*model.ArticlePage, error){
 	var article model.Article
 	var chapters []model.Chapter
 	var infoBox model.InfoBox
@@ -71,7 +65,8 @@ func (s *ArticlesService)LoadArticle(ctx context.Context, title string) (*model.
 	if err != nil{
 		return nil, err
 	}
-	
+	chapterPointers := toChapterPointers(chapters)
+    TraverseChapters(chapterPointers)
 	return &model.ArticlePage{
 		Article: article,
 		Chapters: chapters,
@@ -79,7 +74,75 @@ func (s *ArticlesService)LoadArticle(ctx context.Context, title string) (*model.
 		}, nil
 }
 
-func unbuildHierarchy(roots []model.Chapter) ([]model.Chapter, error) {
+func toChapterPointers(chapters []model.Chapter) []*model.Chapter {
+    var pointers []*model.Chapter
+    for i := range chapters {
+        pointers = append(pointers, &chapters[i])
+    }
+    return pointers
+}
+
+func TraverseChapters(chapters []*model.Chapter) {
+    for _, ch := range chapters {
+        if ch == nil {
+            continue
+        }
+
+        fmt.Printf("Chapter ID: %d\n", ch.ID)
+        if ch.ArticleID != nil {
+            fmt.Printf("Article ID: %d\n", *ch.ArticleID)
+        }
+        fmt.Printf("Name: %s\n", ch.Name)
+        fmt.Printf("Content: %s\n", ch.Content)
+        if ch.ParentID != nil {
+            fmt.Printf("Parent ID: %d\n", *ch.ParentID)
+        }
+
+        if ch.Child != nil {
+            TraverseChapters(ch.Child)
+        }
+    }
+}
+
+
+func (s *ArticlesService) unbuildHierarchyWithRequestToDB(ctx context.Context, articleID int, roots []model.Chapter) error {
+    for _, chapter := range roots {
+        chapter.ArticleID = &articleID
+
+        parentID, err := s.chaptersRepo.Create(ctx, chapter)
+        if err != nil {
+            return err
+        }
+
+        if chapter.Child != nil {
+            if err := s.processChildChapters(ctx, articleID, parentID, chapter.Child); err != nil {
+                return err
+            }
+        }
+    }
+    return nil
+}
+
+func (s *ArticlesService) processChildChapters(ctx context.Context, articleID int, parentID int, children []*model.Chapter) error {
+    for _, chapter := range children {
+        chapter.ArticleID = &articleID
+        chapter.ParentID = &parentID
+
+        newParentID, err := s.chaptersRepo.Create(ctx, *chapter)
+        if err != nil {
+            return err
+        }
+
+        if chapter.Child != nil {
+            if err := s.processChildChapters(ctx, articleID, newParentID, chapter.Child); err != nil {
+                return err
+            }
+        }
+    }
+    return nil
+}
+
+func unbuildHierarchy(roots []model.Chapter) ([]model.Chapter, error) { 
     var chapters []model.Chapter
 
     convertToPointers := func(chaptersList []model.Chapter) []*model.Chapter {
@@ -111,23 +174,52 @@ func unbuildHierarchy(roots []model.Chapter) ([]model.Chapter, error) {
     return chapters, nil
 }
 
-func buildHierarchy(chapters []model.Chapter) ([]model.Chapter, error){
+func buildHierarchy(chapters []model.Chapter) ([]model.Chapter, error) {
 	chapterMap := make(map[int]*model.Chapter)
-	for i:= range chapters{
+	for i := range chapters {
 		chapterMap[chapters[i].ID] = &chapters[i]
 	}
-	var roots []model.Chapter
-	for _, ch:= range chapterMap{
-		if ch.ParentID != nil{
-			parent, exists:= chapterMap[*ch.ParentID]
-			if exists{
-				parent.Child = append(parent.Child, ch)
-			}else{
-				return roots, model.ErrNotFoundParentChapter
+
+	childMap := make(map[int][]*model.Chapter)
+	for i := range chapters {
+		chapter := &chapters[i]
+		if chapter.ParentID != nil {
+			_, exists := chapterMap[*chapter.ParentID]
+			if !exists {
+				return nil, fmt.Errorf("parent with ID %d not found", *chapter.ParentID)
 			}
-		}else{
-			roots = append(roots, *ch)
+			childMap[*chapter.ParentID] = append(childMap[*chapter.ParentID], chapter)
 		}
 	}
-	return roots, nil
+
+	var roots []*model.Chapter
+	for i := range chapters {
+		chapter := &chapters[i]
+		if chapter.ParentID == nil {
+			roots = append(roots, chapter)
+		}
+	}
+
+	for i := range roots {
+		attachChildren(roots[i], childMap)
+	}
+	return convertToValues(roots), nil
+}
+
+func attachChildren(parent *model.Chapter, childMap map[int][]*model.Chapter) {
+	children, exists := childMap[parent.ID]
+	if exists {
+		parent.Child = children
+		for _, child := range children {
+			attachChildren(child, childMap)
+		}
+	}
+}
+
+func convertToValues(chapters []*model.Chapter) []model.Chapter {
+	var result []model.Chapter
+	for _, chapter := range chapters {
+		result = append(result, *chapter)
+	}
+	return result
 }
