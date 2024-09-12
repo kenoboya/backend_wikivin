@@ -40,7 +40,7 @@ type InfoBox interface{
 }
 
 type Users interface{
-	Create(ctx context.Context, user model.User) (int, error)
+	Create(ctx context.Context, user model.UserSignUp) (int, error)
 }
 type People interface{
 	Create(ctx context.Context, person model.Person) error

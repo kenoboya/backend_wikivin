@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"wikivin/internal/model"
+	repo "wikivin/internal/repository/mysql"
 )
 
 type UserService struct {
