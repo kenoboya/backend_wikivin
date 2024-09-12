@@ -7,20 +7,20 @@ import (
 )
 
 const (
-    Person            = "person"
-    Building          = "building"
-    Company           = "company"
-    Event             = "event"
-    Film              = "film"
-    Book              = "book"
-    Album             = "album"
-    Animal            = "animal"
-    Award             = "award"
-    Song              = "song"
-    Country           = "country"
-    University        = "university"
-    Museum            = "museum"
-    PoliticalPosition = "political"
+    PersonInfoBoxType            = "person"
+    BuildingInfoBoxType           = "building"
+    CompanyInfoBoxType           = "company"
+    EventInfoBoxType              = "event"
+    FilmInfoBoxType               = "film"
+    BookInfoBoxType               = "book"
+    AlbumInfoBoxType              = "album"
+    AnimalInfoBoxType             = "animal"
+    AwardInfoBoxType              = "award"
+    SongInfoBoxType               = "song"
+    CountryInfoBoxType            = "country"
+    UniversityInfoBoxType         = "university"
+    MuseumInfoBoxType             = "museum"
+    PoliticalPositionInfoBoxType  = "political"
 )
 
 var infoBoxFactories map[string]func() InfoBox
@@ -177,20 +177,20 @@ type PoliticalPositionInfoBox struct {
 func init(){
     if infoBoxFactories == nil{
         infoBoxFactories = map[string]func() InfoBox{
-            Person:             func() InfoBox { return &PersonInfoBox{} },
-            Building:           func() InfoBox { return &BuildingInfoBox{} },
-            Company:            func() InfoBox { return &CompanyInfoBox{} },
-            Event:              func() InfoBox { return &EventInfoBox{} },
-            Film:               func() InfoBox { return &FilmInfoBox{} },
-            Book:               func() InfoBox { return &BookInfoBox{} },
-            Album:              func() InfoBox { return &AlbumInfoBox{} },
-            Animal:             func() InfoBox { return &AnimalInfoBox{} },
-            Award:              func() InfoBox { return &AwardInfoBox{} },
-            Song:               func() InfoBox { return &SongInfoBox{} },
-            Country:            func() InfoBox { return &CountryInfoBox{} },
-            University:         func() InfoBox { return &UniversityInfoBox{} },
-            Museum:             func() InfoBox { return &MuseumInfoBox{} },
-            PoliticalPosition:  func() InfoBox { return &PoliticalPositionInfoBox{} },
+            PersonInfoBoxType :             func() InfoBox { return &PersonInfoBox{} },
+            BuildingInfoBoxType :           func() InfoBox { return &BuildingInfoBox{} },
+            CompanyInfoBoxType :            func() InfoBox { return &CompanyInfoBox{} },
+            EventInfoBoxType :              func() InfoBox { return &EventInfoBox{} },
+            FilmInfoBoxType :               func() InfoBox { return &FilmInfoBox{} },
+            BookInfoBoxType :               func() InfoBox { return &BookInfoBox{} },
+            AlbumInfoBoxType :              func() InfoBox { return &AlbumInfoBox{} },
+            AnimalInfoBoxType :             func() InfoBox { return &AnimalInfoBox{} },
+            AwardInfoBoxType :              func() InfoBox { return &AwardInfoBox{} },
+            SongInfoBoxType :               func() InfoBox { return &SongInfoBox{} },
+            CountryInfoBoxType :            func() InfoBox { return &CountryInfoBox{} },
+            UniversityInfoBoxType :         func() InfoBox { return &UniversityInfoBox{} },
+            MuseumInfoBoxType :             func() InfoBox { return &MuseumInfoBox{} },
+            PoliticalPositionInfoBoxType :  func() InfoBox { return &PoliticalPositionInfoBox{} },
         }
     }
 }
@@ -215,7 +215,7 @@ type InfoBox interface {
 
 
 func (p *PersonInfoBox) GetType() string {
-    return Person
+    return PersonInfoBoxType 
 }
 
 func (p *PersonInfoBox) ToJSON() (string, error) {
@@ -228,7 +228,7 @@ func (p *PersonInfoBox) ToJSON() (string, error) {
 
 
 func (b *BuildingInfoBox) GetType() string {
-    return Building
+    return BuildingInfoBoxType 
 }
 
 func (b *BuildingInfoBox) ToJSON() (string, error) {
@@ -241,7 +241,7 @@ func (b *BuildingInfoBox) ToJSON() (string, error) {
 
 
 func (c *CompanyInfoBox) GetType() string {
-    return Company
+    return CompanyInfoBoxType 
 }
 
 func (c *CompanyInfoBox) ToJSON() (string, error) {
@@ -254,7 +254,7 @@ func (c *CompanyInfoBox) ToJSON() (string, error) {
 
 
 func (e *EventInfoBox) GetType() string {
-    return Event
+    return EventInfoBoxType 
 }
 
 func (e *EventInfoBox) ToJSON() (string, error) {
@@ -267,7 +267,7 @@ func (e *EventInfoBox) ToJSON() (string, error) {
 
 
 func (f *FilmInfoBox) GetType() string {
-    return Film
+    return FilmInfoBoxType 
 }
 
 func (f *FilmInfoBox) ToJSON() (string, error) {
@@ -280,7 +280,7 @@ func (f *FilmInfoBox) ToJSON() (string, error) {
 
 
 func (b *BookInfoBox) GetType() string {
-    return Book
+    return BookInfoBoxType 
 }
 
 func (b *BookInfoBox) ToJSON() (string, error) {
@@ -293,7 +293,7 @@ func (b *BookInfoBox) ToJSON() (string, error) {
 
 
 func (a *AlbumInfoBox) GetType() string {
-    return Album
+    return AlbumInfoBoxType 
 }
 
 func (a *AlbumInfoBox) ToJSON() (string, error) {
@@ -306,7 +306,7 @@ func (a *AlbumInfoBox) ToJSON() (string, error) {
 
 
 func (a *AnimalInfoBox) GetType() string {
-    return Animal
+    return AnimalInfoBoxType 
 }
 
 func (a *AnimalInfoBox) ToJSON() (string, error) {
@@ -319,7 +319,7 @@ func (a *AnimalInfoBox) ToJSON() (string, error) {
 
 
 func (a *AwardInfoBox) GetType() string {
-    return Award
+    return AwardInfoBoxType 
 }
 
 func (a *AwardInfoBox) ToJSON() (string, error) {
@@ -332,7 +332,7 @@ func (a *AwardInfoBox) ToJSON() (string, error) {
 
 
 func (s *SongInfoBox) GetType() string {
-    return Song
+    return SongInfoBoxType 
 }
 
 func (s *SongInfoBox) ToJSON() (string, error) {
@@ -345,7 +345,7 @@ func (s *SongInfoBox) ToJSON() (string, error) {
 
 
 func (c *CountryInfoBox) GetType() string {
-    return Country
+    return CountryInfoBoxType 
 }
 
 func (c *CountryInfoBox) ToJSON() (string, error) {
@@ -358,7 +358,7 @@ func (c *CountryInfoBox) ToJSON() (string, error) {
 
 
 func (u *UniversityInfoBox) GetType() string {
-    return University
+    return UniversityInfoBoxType 
 }
 
 func (u *UniversityInfoBox) ToJSON() (string, error) {
@@ -371,7 +371,7 @@ func (u *UniversityInfoBox) ToJSON() (string, error) {
 
 
 func (m *MuseumInfoBox) GetType() string {
-    return Museum
+    return MuseumInfoBoxType 
 }
 
 func (m *MuseumInfoBox) ToJSON() (string, error) {
@@ -383,7 +383,7 @@ func (m *MuseumInfoBox) ToJSON() (string, error) {
 }
 
 func (p *PoliticalPositionInfoBox) GetType() string {
-    return PoliticalPosition
+    return PoliticalPositionInfoBoxType 
 }
 
 func (p *PoliticalPositionInfoBox) ToJSON() (string, error) {

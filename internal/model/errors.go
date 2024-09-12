@@ -9,4 +9,6 @@ var (
 	ErrSpecifiedIdInParam = errors.New("an incorrect ID was specified in the parameter, which led to an error during conversion")
 	ErrInfoBoxType = errors.New("infoBoxType is required")
 	ErrNilPointerFromReflection = errors.New("received nil pointer")
+	ErrUserNotFound = errors.New("user doesn't exist")
+	ErrUserBlocked = errors.New("user is blocked")
 )

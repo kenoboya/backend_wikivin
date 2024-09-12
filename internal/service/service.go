@@ -21,3 +21,7 @@ type Articles interface {
 	LoadArticles(ctx context.Context) ([]model.Article, error)
 	LoadArticle(ctx context.Context, title string) (*model.ArticlePage, error)
 }
+
+type User interface{
+	SignUp(ctx context.Context, requestSignUp model.RequestSignUp)(model.Token, error)
+}

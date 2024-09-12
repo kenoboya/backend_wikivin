@@ -38,3 +38,10 @@ type InfoBox interface{
 	GetTypeAndObjectInfoBoxByArticleID(ctx context.Context, articleID int) (string, int, error)
 	GetInfoBoxByObjectInfoBoxIDAndType(ctx context.Context, ObjectInfoBoxID int, infoBoxType string) (model.InfoBox, error)
 }
+
+type Users interface{
+	Create(ctx context.Context, user model.User) (int, error)
+}
+type People interface{
+	Create(ctx context.Context, person model.Person) error
+}
