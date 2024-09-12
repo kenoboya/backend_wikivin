@@ -65,45 +65,12 @@ func (s *ArticlesService) LoadArticle(ctx context.Context, title string) (*model
 	if err != nil{
 		return nil, err
 	}
-	chapterPointers := toChapterPointers(chapters)
-    TraverseChapters(chapterPointers)
 	return &model.ArticlePage{
 		Article: article,
 		Chapters: chapters,
 		InfoBox: infoBox,
 		}, nil
 }
-
-func toChapterPointers(chapters []model.Chapter) []*model.Chapter {
-    var pointers []*model.Chapter
-    for i := range chapters {
-        pointers = append(pointers, &chapters[i])
-    }
-    return pointers
-}
-
-func TraverseChapters(chapters []*model.Chapter) {
-    for _, ch := range chapters {
-        if ch == nil {
-            continue
-        }
-
-        fmt.Printf("Chapter ID: %d\n", ch.ID)
-        if ch.ArticleID != nil {
-            fmt.Printf("Article ID: %d\n", *ch.ArticleID)
-        }
-        fmt.Printf("Name: %s\n", ch.Name)
-        fmt.Printf("Content: %s\n", ch.Content)
-        if ch.ParentID != nil {
-            fmt.Printf("Parent ID: %d\n", *ch.ParentID)
-        }
-
-        if ch.Child != nil {
-            TraverseChapters(ch.Child)
-        }
-    }
-}
-
 
 func (s *ArticlesService) unbuildHierarchyWithRequestToDB(ctx context.Context, articleID int, roots []model.Chapter) error {
     for _, chapter := range roots {

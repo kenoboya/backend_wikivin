@@ -1,49 +1,385 @@
-{
-  "Article": {
-    "Title": "Title first",
-    "LeadSection": "In this article, we will explore how to create and use data structures in the Go language.",
-    "Image": "https://example.com/image.jpg"
-  },
-  "Chapters": [
-    {
-      "Name": "Introduction",
-      "Content": "INTRODUCTION",
-      "Child": [
-        {
-          "Name": "Basic Concepts",
-          "Content": "BASIC CONCEPTS",
-          "Child": [
-            {
-              "Name": "Data Types",
-              "Content": "DATA TYPES",
-              "Child": []
-            }
-          ]
-        }
-      ]
+[
+  {
+    "Article": {
+      "Title": "Князь Василько",
+      "LeadSection": "Князь Василько був одним з перших князів Поділля, який правив у 11-12 століттях.",
+      "Image": "https://upload.wikimedia.org/wikipedia/uk/7/76/%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8C%D0%BA%D0%BE_%D0%A0%D0%BE%D0%BC%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%87.jpg"
     },
-    {
-      "Name": "Syntax Basics",
-      "Content": "SYNTAX BASICS",
-      "Child": [
-        {
-          "Name": "Variables and Constants",
-          "Content": "VARIABLES AND CONSTANTS",
-          "Child": []
-        }
-      ]
-    }
-  ],
-  "person": {
-    "FullName": "Ivan Ivanovich Ivanov",
-    "BirthDate": "1980-01-01T00:00:00Z",
-    "PlaceOfBirth": "Moscow, Russia",
-    "Nationality": "Russian",
-    "DeathDate": null,
-    "Educations": "Moscow State University, Faculty of Mathematics",
-    "Occupations": "Programmer, Professor of Mathematics",
-    "Parents": "Petr Ivanovich Ivanov, Anna Petrovna Ivanova",
-    "Children": "Sergey Ivanov, Maria Ivanova"
+    "Chapters": [
+      {
+        "Name": "Introduction",
+        "Content": "Князь Василько був видатним правителем Поділля.",
+        "Child": [
+          {
+            "Name": "Early Life",
+            "Content": "Інформація про ранні роки життя князя Василька.",
+            "Child": []
+          },
+          {
+            "Name": "Political Achievements",
+            "Content": "Основні досягнення князя в політичній сфері.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Reign",
+        "Content": "Правління князя Василька в Поділлі.",
+        "Child": [
+          {
+            "Name": "Military Campaigns",
+            "Content": "Військові кампанії та боротьба за території.",
+            "Child": []
+          },
+          {
+            "Name": "Alliances",
+            "Content": "Політичні союзи та відносини з іншими князівствами.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Legacy",
+        "Content": "Спадщина та вплив князя Василька на наступні покоління.",
+        "Child": []
+      }
+    ],
+    "person": {
+      "full_name": "Василько",
+      "birth_date": "1050-01-01 00:00:00",
+      "place_of_birth": "Поділля",
+      "nationality": "Подільська",
+      "educations": "Немає",
+      "occupations": "Князь",
+      "parents": "Невідомі",
+      "children": "Володимир, Юрій"
+    },
+    "InfoBoxType": "person"
   },
-  "InfoBoxType": "person"
-}
+  {
+    "Article": {
+      "Title": "Князь Мстислав",
+      "LeadSection": "Князь Мстислав правив у 12 столітті, активно займаючись розширенням своїх володінь.",
+      "Image": "https://upload.wikimedia.org/wikipedia/commons/6/69/Mstislav_I_of_Kiev_%28Tsarskiy_titulyarnik%29.jpg"
+    },
+    "Chapters": [
+      {
+        "Name": "Introduction",
+        "Content": "Князь Мстислав активно розширював свої володіння.",
+        "Child": [
+          {
+            "Name": "Early Life",
+            "Content": "Ранні роки князя Мстислава.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Expansion",
+        "Content": "Процес розширення володінь князя.",
+        "Child": [
+          {
+            "Name": "Key Battles",
+            "Content": "Основні битви та конфлікти.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Political Influence",
+        "Content": "Політичний вплив князя Мстислава.",
+        "Child": [
+          {
+            "Name": "Alliances and Enemies",
+            "Content": "Політичні союзники та противники.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Death and Succession",
+        "Content": "Смерть князя та його спадщина.",
+        "Child": [
+          {
+            "Name": "Succession",
+            "Content": "Хто став наступником князя.",
+            "Child": []
+          }
+        ]
+      }
+    ],
+    "person": {
+      "full_name": "Мстислав",
+      "birth_date": "1100-01-01 00:00:00",
+      "place_of_birth": "Поділля",
+      "nationality": "Подільська",
+      "educations": "Немає",
+      "occupations": "Князь",
+      "parents": "Невідомі",
+      "children": "Андрій, Іван"
+    },
+    "InfoBoxType": "person"
+  },
+  {
+    "Article": {
+      "Title": "Князь Юрій",
+      "LeadSection": "Князь Юрій був правителем Поділля в середині 12 століття.",
+      "Image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR4afKtBlufaY-D0YNWeLjtLyvDN8tx95Kaw&s"
+    },
+    "Chapters": [
+      {
+        "Name": "Introduction",
+        "Content": "Князь Юрій займався політичною діяльністю.",
+        "Child": [
+          {
+            "Name": "Early Years",
+            "Content": "Ранні роки князя Юрія.",
+            "Child": [
+              {
+                "Name": "Family Background",
+                "Content": "Інформація про сім'ю та походження.",
+                "Child": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Reign",
+        "Content": "Особливості правління князя Юрія.",
+        "Child": [
+          {
+            "Name": "Administrative Reforms",
+            "Content": "Реформи в адміністративній сфері.",
+            "Child": [
+              {
+                "Name": "Reform Details",
+                "Content": "Докладні деталі реформ.",
+                "Child": []
+              }
+            ]
+          },
+          {
+            "Name": "Military Campaigns",
+            "Content": "Військові кампанії князя.",
+            "Child": [
+              {
+                "Name": "Major Battles",
+                "Content": "Основні битви та їх результати.",
+                "Child": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Legacy",
+        "Content": "Спадщина князя Юрія.",
+        "Child": [
+          {
+            "Name": "Influence on Future Generations",
+            "Content": "Вплив на наступні покоління.",
+            "Child": [
+              {
+                "Name": "Historical Impact",
+                "Content": "Історичний вплив на регіон.",
+                "Child": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "person": {
+      "full_name": "Юрій",
+      "birth_date": "1150-01-01 00:00:00",
+      "place_of_birth": "Поділля",
+      "nationality": "Подільська",
+      "educations": "Немає",
+      "occupations": "Князь",
+      "parents": "Невідомі",
+      "children": "Василь, Петро"
+    },
+    "InfoBoxType": "person"
+  },
+  {
+    "Article": {
+      "Title": "Князь Роман",
+      "LeadSection": "Князь Роман правив у кінці 12 – початку 13 століття, активно боронився проти татар.",
+      "Image": "https://day.kyiv.ua/sites/default/files/uz151/20mstislavovich.jpg"
+    },
+    "Chapters": [
+      {
+        "Name": "Introduction",
+        "Content": "Князь Роман активно боронився проти татар.",
+        "Child": [
+          {
+            "Name": "Early Life",
+            "Content": "Ранні роки життя князя Романа.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Military Campaigns",
+        "Content": "Військові кампанії князя Романа.",
+        "Child": [
+          {
+            "Name": "Defense Against Tatars",
+            "Content": "Оборона від татарських нападів.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Political Strategies",
+        "Content": "Політичні стратегії князя Романа.",
+        "Child": [
+          {
+            "Name": "Alliances",
+            "Content": "Політичні союзи та дипломатія.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Death and Legacy",
+        "Content": "Смерть князя та його спадщина.",
+        "Child": [
+          {
+            "Name": "Succession",
+            "Content": "Наступники князя Романа.",
+            "Child": []
+          }
+        ]
+      }
+    ],
+    "person": {
+      "full_name": "Роман",
+      "birth_date": "1170-01-01 00:00:00",
+      "place_of_birth": "Поділля",
+      "nationality": "Подільська",
+      "educations": "Немає",
+      "occupations": "Князь",
+      "parents": "Невідомі",
+      "children": "Ігор, Микита"
+    },
+    "InfoBoxType": "person"
+  },
+  {
+    "Article": {
+      "Title": "Князь Михайло",
+      "LeadSection": "Князь Михайло правив у середині 13 століття, його правління відзначалося частими конфліктами.",
+      "Image": "https://uspinnia.org.ua/wp-content/uploads/mihail_chernigovsk.jpg"
+    },
+    "Chapters": [
+      {
+        "Name": "Introduction",
+        "Content": "Князь Михайло був залучений у численні конфлікти.",
+        "Child": [
+          {
+            "Name": "Early Life",
+            "Content": "Ранні роки князя Михайла.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Reign",
+        "Content": "Основні події правління князя Михайла.",
+        "Child": [
+          {
+            "Name": "Conflicts and Wars",
+            "Content": "Конфлікти та війни під час правління.",
+            "Child": []
+          },
+          {
+            "Name": "Administrative Changes",
+            "Content": "Адміністративні зміни в князівстві.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Death and Legacy",
+        "Content": "Смерть князя та його спадщина.",
+        "Child": [
+          {
+            "Name": "Successor",
+            "Content": "Наступник князя Михайла.",
+            "Child": []
+          }
+        ]
+      }
+    ],
+    "person": {
+      "full_name": "Михайло",
+      "birth_date": "1220-01-01 00:00:00",
+      "place_of_birth": "Поділля",
+      "nationality": "Подільська",
+      "educations": "Немає",
+      "occupations": "Князь",
+      "parents": "Невідомі",
+      "children": "Олександр, Андрій"
+    },
+    "InfoBoxType": "person"
+  },
+  {
+    "Article": {
+      "Title": "Князь Дмитро",
+      "LeadSection": "Князь Дмитро був одним з останніх князів Поділля перед його завоюванням іншими силами.",
+      "Image": "https://pz.vntu.edu.ua/media/uploads/user/35/prew/m3hf0zlcus5njkwo.jpg"
+    },
+    "Chapters": [
+      {
+        "Name": "Introduction",
+        "Content": "Князь Дмитро був останнім правителем Поділля.",
+        "Child": [
+          {
+            "Name": "Early Life",
+            "Content": "Ранні роки князя Дмитра.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Reign",
+        "Content": "Правління князя Дмитра.",
+        "Child": [
+          {
+            "Name": "Final Years",
+            "Content": "Останні роки правління та події.",
+            "Child": []
+          },
+          {
+            "Name": "Defense Strategies",
+            "Content": "Стратегії оборони Поділля.",
+            "Child": []
+          }
+        ]
+      },
+      {
+        "Name": "Legacy",
+        "Content": "Спадщина князя Дмитра.",
+        "Child": [
+          {
+            "Name": "Historical Impact",
+            "Content": "Вплив на подальшу історію Поділля.",
+            "Child": []
+          }
+        ]
+      }
+    ],
+    "person": {
+      "full_name": "Дмитро",
+      "birth_date": "1250-01-01 00:00:00",
+      "place_of_birth": "Поділля",
+      "nationality": "Подільська",
+      "educations": "Немає",
+      "occupations": "Князь",
+      "parents": "Невідомі",
+      "children": "Ярослав, Петро"
+    },
+    "InfoBoxType": "person"
+  }
+]

@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS articles (
     article_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(50) UNIQUE,
-    lead_section VARCHAR(150),
-    image VARCHAR(255)
+    lead_section TEXT,
+    image LONGTEXT
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS chapters (
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS chapters (
     article_id BIGINT NOT NULL,
     parent_id BIGINT,
     name VARCHAR(100) NOT NULL,
-    content MEDIUMTEXT NOT NULL,
+    content LONGTEXT NOT NULL,
     FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
