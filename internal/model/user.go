@@ -12,7 +12,7 @@ const (
 )
 
 type User struct {
-	ID           string `json:"user_id" db:"user_id"`
+	ID           int    `json:"user_id" db:"user_id"`
 	Username     string `json:"username" db:"username"`
 	Email        string `json:"email" db:"email"`
 	Password     string `json:"password" db:"password"`

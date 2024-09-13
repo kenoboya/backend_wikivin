@@ -8,11 +8,18 @@ import (
 
 type Services struct {
 	Articles Articles
+	User User
 }
 
 func NewServices(repo *repo.Repositories)*Services{
 	return &Services{
 		Articles: NewArticlesService(repo.Articles, repo.Chapters, repo.InfoBox),
+		User: NewUsersService(
+			repo.Users,
+			repo.People,
+			hasher,
+			tokenManager,
+		),
 	}
 }
 
@@ -23,5 +30,7 @@ type Articles interface {
 }
 
 type User interface{
-	SignUp(ctx context.Context, requestSignUp model.RequestSignUp)(model.Token, error)
+	SignUp(ctx context.Context, requestSignUp model.RequestSignUp)(model.Tokens, error)
+	SignIn(ctx context.Context, requestSignIn model.UserSignIn)(model.Tokens, error)
+	RefreshToken(ctx context.Context, refreshToken string)(model.Tokens, error)
 }

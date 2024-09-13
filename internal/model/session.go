@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type Token struct {
+type Tokens struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }

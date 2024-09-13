@@ -11,4 +11,6 @@ var (
 	ErrNilPointerFromReflection = errors.New("received nil pointer")
 	ErrUserNotFound = errors.New("user doesn't exist")
 	ErrUserBlocked = errors.New("user is blocked")
+	ErrInvalidPassword = errors.New("invalid password")
+	ErrInvalidLogin = errors.New("invalid login")
 )
