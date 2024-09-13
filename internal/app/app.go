@@ -23,7 +23,11 @@ func Run(path string) {
 	}
 	defer db.Close()
 	repositories := repo.NewRepositories(db)
-	services:= service.NewServices(repositories)
+	deps, err:= service.NewDeps(repositories, cfg.Auth)
+	if err != nil{
+		logger.Error(err)
+	}
+	services:= service.NewServices(*deps)
 	handler:= rest.NewHandler(services)
 	server:= server.NewServer(cfg, handler)
 	// go func(){

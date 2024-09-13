@@ -21,6 +21,14 @@ type UsersService struct {
 	refreshTokenTTL time.Duration
 }
 
+func (s *UsersService) GetAccessTokenTTL() time.Duration{
+	return s.accessTokenTTL
+}
+
+func (s *UsersService) GetRefreshTokenTTL() time.Duration{
+	return s.refreshTokenTTL
+}
+
 func NewUsersService(userRepo repo.Users, peopleRepo repo.People, 
 	hasher hash.PasswordHasher, tokenManager auth.TokenManager) *UsersService {
 	return &UsersService{
@@ -56,13 +64,31 @@ func (s *UsersService) SignIn(ctx context.Context, requestSignIn model.UserSignI
 		}
 		return model.Tokens{}, err
 	}
-	if user.Blocked{
+	if user.IsBlocked(){
 		return model.Tokens{}, model.ErrUserBlocked
 	}
 	if err:= s.hasher.Compare(user.Password, requestSignIn.Password); err != nil{
 		return model.Tokens{}, err
 	}
 	return s.createSession(ctx, &user)
+}
+
+func (s *UsersService) RefreshToken(ctx context.Context, refreshToken string) (model.Tokens, error){
+	var (
+		res model.Tokens
+		err error
+	)
+	if res.RefreshToken, err = s.tokenManager.RefreshToken(refreshToken, s.refreshTokenTTL); err != nil{
+		return model.Tokens{}, err
+	}
+	claims, err:= s.tokenManager.ParseToken(res.RefreshToken)
+	if err != nil{
+		return model.Tokens{}, err
+	}
+	if res.AccessToken, err = s.tokenManager.NewJWT(claims.UserID, claims.Role, s.accessTokenTTL); err!= nil{
+		return model.Tokens{}, err
+	}
+	return res, nil
 }
 
 func (s *UsersService) createSession(ctx context.Context, user *model.User) (model.Tokens, error){

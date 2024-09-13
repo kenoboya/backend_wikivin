@@ -11,16 +11,25 @@ import (
 var (
 	ErrSecretKeyIsEmpty = errors.New("secret key is empty")
 	ErrUnauthorized = errors.New("token is invalid")
+
+	ErrInvalidUserID = errors.New("invalid user ID in token")
+	ErrInvalidRole = errors.New("invalid role in token")
 )
 
 type TokenManager interface {
 	NewJWT(userID int, role string, ttl time.Duration) (string, error)
-	VerifyToken(token string) (int, error)
-	RefreshToken(token string) (string error)
+	RefreshToken(token string, refreshTokenTTL time.Duration) (string, error)
+	ParseToken(token string) (*Claims, error)
 }
 
 type Manager struct{
 	secretKey string
+}
+
+type Claims struct {
+	UserID int    `json:"id"`
+	Role   string `json:"role"`
+	jwt.RegisteredClaims
 }
 
 func NewManager(secretKey string)(*Manager, error){
@@ -43,21 +52,49 @@ func (m *Manager) NewJWT(userID int, role string, ttl time.Duration) (string, er
 	return tokenString, nil
 }
 
-func (m *Manager) RefreshToken(oldToken string, refreshTokenTTL time.Duration) (string, error){
-	token, err:= jwt.Parse(oldToken, func(token *jwt.Token)(interface{}, error){
-		if _, ok:= token.Method.(*jwt.SigningMethodHMAC); !ok{
+func (m *Manager) RefreshToken(oldToken string, refreshTokenTTL time.Duration) (string, error) {
+	token, err := jwt.Parse(oldToken, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(m.secretKey), nil
+	})
+	if err != nil {
+		return "", err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		userID, ok := claims["id"].(float64) 
+		if !ok {
+			return "", ErrInvalidUserID
+		}
+		role, ok := claims["role"].(string)
+		if !ok {
+			return "", ErrInvalidRole
+		}
+
+		newToken, err := m.NewJWT(int(userID), role, refreshTokenTTL)
+		if err != nil {
+			return "", err
+		}
+
+		return newToken, nil
+	}
+	return "", ErrUnauthorized
+}
+
+func (m *Manager) ParseToken(tokenString string) (*Claims, error){
+	token, err:= jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token)(interface{}, error){
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		return []byte(m.secretKey), nil
 	})
 	if err != nil{
-		return "", err
+		return nil, err
 	}
-
-	if claims, ok:= token.Claims.(jwt.MapClaims); ok && token.Valid{
-		userID := int(claims["id"].(float64))
-		role := claims["role"].(string)
-		return m.NewJWT(userID, role, refreshTokenTTL)
+	if claims, ok:= token.Claims.(*Claims); ok && token.Valid{
+		return claims, nil
 	}
-	return "", ErrUnauthorized
+	return nil, ErrUnauthorized
 }

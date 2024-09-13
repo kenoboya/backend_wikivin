@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"time"
 	mysql "wikivin/pkg/database/MySQL"
 
@@ -12,6 +13,18 @@ import (
 type Config struct {
 	HTTP HTTPConfig
 	MySQL mysql.MySQLConfig
+	Auth AuthConfig
+}
+
+type AuthConfig struct{
+	JWT  JWTConfig
+	PasswordSalt string
+}
+
+type JWTConfig struct{
+	AccessTokenTTL time.Duration `mapstructure:"accessTokenTTL"`
+	RefreshTokenTTL time.Duration `mapstructure:"refreshTokenTTL"`
+	SecretKey string
 }
 
 type HTTPConfig struct {
@@ -39,6 +52,9 @@ func unmarshal(config *Config) error{
 	if err:= viper.UnmarshalKey("http", &config.HTTP); err != nil{
 		return err
 	}
+	if err:= viper.UnmarshalKey("auth", &config.HTTP); err != nil{
+		return err
+	}
 	return nil
 }
 
@@ -51,6 +67,9 @@ func setFromEnv(config *Config) error{
 		return err
 	}
 
+	config.Auth.PasswordSalt = os.Getenv("PASSWORD_SALT")
+	config.Auth.JWT.SecretKey = os.Getenv("SECRET_KEY")
+	
 	return nil
 }
 

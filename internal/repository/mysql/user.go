@@ -7,15 +7,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type UserRepository struct {
+type UsersRepository struct {
 	db *sqlx.DB
 }
 
-func NewUserRepository(db *sqlx.DB) *UserRepository{
-	return &UserRepository{db}
+func NewUsersRepository(db *sqlx.DB) *UsersRepository{
+	return &UsersRepository{db}
 }
 
-func (r *UserRepository) Create(ctx context.Context, userSignUp model.UserSignUp) (model.User, error){
+func (r *UsersRepository) Create(ctx context.Context, userSignUp model.UserSignUp) (model.User, error){
 	var user model.User
 	query:= "INSERT INTO users(username, email, password) VALUES(?,?,?)"
 	
@@ -29,6 +29,15 @@ func (r *UserRepository) Create(ctx context.Context, userSignUp model.UserSignUp
 		return user, err
 	}
 	if err:= r.db.GetContext(ctx, &user, "SELECT * FROM users WHERE id = ?", id); err != nil{
+		return model.User{}, err
+	}
+	return user, nil
+}
+
+func (r *UsersRepository) GetByLogin(ctx context.Context, login string) (model.User, error){
+	var user model.User
+	query:= "SELECT * FROM users WHERE email = ? OR username = ?"
+	if err:= r.db.GetContext(ctx, &user, query, login, login); err != nil{
 		return model.User{}, err
 	}
 	return user, nil
