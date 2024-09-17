@@ -3,6 +3,7 @@ package v1
 import (
 	"net/http"
 	"wikivin/internal/model"
+	"wikivin/pkg/auth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,14 +15,16 @@ func (h *Handler) initUserRoutes(router *gin.RouterGroup){
 		user.POST("/sign-in", h.signIn)
 		user.GET("/refresh", h.refresh)
 
-		user.GET("/profile", h.userProfile)
-		user.PUT("/profile", h.updateUserProfile)
+		user.GET("/user/profile", h.getBriefInfoProfile)
 
-		user.POST("/favorite-article", h.addToFavoriteArticle)
-		user.DELETE("/favorite-article/:title", h.removeFromFavoriteArticle)
+		// user.GET("/profile/:username", h.userProfile)
+		// user.PUT("/profile", h.updateUserProfile)
 
-		user.GET("/favorite-articles", h.getFavoriteArticles)
-		user.GET("/history-articles", h.historyArticles)
+		// user.POST("/favorite-article", h.addToFavoriteArticle)
+		// user.DELETE("/favorite-article/:title", h.removeFromFavoriteArticle)
+
+		// user.GET("/favorite-articles", h.getFavoriteArticles)
+		// user.GET("/history-articles", h.historyArticles)
 	}
 }
 
@@ -32,14 +35,13 @@ func (h *Handler) signUp(c *gin.Context){
 		return
 	}
 	
-	tokens, err:= h.services.User.SignUp(c.Request.Context(), requestSignUp)
+	tokens, err:= h.services.Users.SignUp(c.Request.Context(), requestSignUp)
 	if err != nil{
 		newResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-
-	c.SetCookie("access_token", tokens.AccessToken, int(h.services.User.GetAccessTokenTTL().Seconds()), "/", "localhost", false, true)
-	c.SetCookie("refresh_token", tokens.RefreshToken, int(h.services.User.GetRefreshTokenTTL().Seconds()), "/", "localhost", false, true)
+	c.SetCookie("access_token", tokens.AccessToken, int(h.services.Users.GetAccessTokenTTL().Seconds()), "/", "localhost", false, true)
+	c.SetCookie("refresh_token", tokens.RefreshToken, int(h.services.Users.GetRefreshTokenTTL().Seconds()), "/", "localhost", false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
 }
 
@@ -50,14 +52,14 @@ func (h *Handler) signIn(c *gin.Context){
 		return
 	}
 	
-	tokens, err:= h.services.User.SignIn(c.Request.Context(), userSignIn)
+	tokens, err:= h.services.Users.SignIn(c.Request.Context(), userSignIn)
 	if err != nil{
 		newResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	c.SetCookie("access_token", tokens.AccessToken, int(h.services.User.GetAccessTokenTTL().Seconds()), "/", "localhost", false, true)
-	c.SetCookie("refresh_token", tokens.RefreshToken, int(h.services.User.GetRefreshTokenTTL().Seconds()), "/", "localhost", false, true)
+	c.SetCookie("access_token", tokens.AccessToken, int(h.services.Users.GetAccessTokenTTL().Seconds()), "/", "localhost", false, true)
+	c.SetCookie("refresh_token", tokens.RefreshToken, int(h.services.Users.GetRefreshTokenTTL().Seconds()), "/", "localhost", false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "User signed in successfully"})
 }
 
@@ -68,13 +70,32 @@ func (h *Handler) refresh(c *gin.Context){
 		return
 	}
 	
-	tokens, err:= h.services.User.RefreshToken(c.Request.Context(), refreshToken)
+	tokens, err:= h.services.Users.RefreshToken(c.Request.Context(), refreshToken)
 	if err != nil{
 		newResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	c.SetCookie("access_token", tokens.AccessToken, int(h.services.User.GetAccessTokenTTL().Seconds()), "/", "localhost", false, true)
-	c.SetCookie("refresh_token", tokens.RefreshToken, int(h.services.User.GetRefreshTokenTTL().Seconds()), "/", "localhost", false, true)
+	c.SetCookie("access_token", tokens.AccessToken, int(h.services.Users.GetAccessTokenTTL().Seconds()), "/", "localhost", false, true)
+	c.SetCookie("refresh_token", tokens.RefreshToken, int(h.services.Users.GetRefreshTokenTTL().Seconds()), "/", "localhost", false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "Token refreshed successfully"})
+}
+
+func(h *Handler) getBriefInfoProfile(c *gin.Context){
+	token, err:= c.Cookie("access_token")
+	if err != nil{
+		newResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	userID, err:= h.services.Users.GetUserIDFromToken(c.Request.Context(), token, auth.AccessToken)
+	if err != nil{
+		newResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	briefInfoProfile, err:= h.services.Profiles.GetBriefInfoProfile(c.Request.Context(), userID)
+	if err != nil{
+		newResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, briefInfoProfile)
 }

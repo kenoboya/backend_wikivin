@@ -16,7 +16,7 @@ func NewPeopleRepository(db *sqlx.DB) *PeopleRepository{
 }
 
 func (r *PeopleRepository) Create(ctx context.Context, person model.Person) error{
-	query:= "INSERT INTO people(first_name, last_name, birth_date, gender, country, city, image) VALUES(:first_name, :last_name, :birth_date, :gender, :country, :city, :image)"
+	query:= "INSERT INTO people(user_id, first_name, last_name, birth_date, gender, country, city, image) VALUES(:user_id, :first_name, :last_name, :birth_date, :gender, :country, :city, :image)"
 	if _,err:= r.db.NamedExecContext(ctx, query, person); err!= nil{
 		return err
 	}

@@ -28,7 +28,7 @@ func (r *UsersRepository) Create(ctx context.Context, userSignUp model.UserSignU
 	if err != nil{
 		return user, err
 	}
-	if err:= r.db.GetContext(ctx, &user, "SELECT * FROM users WHERE id = ?", id); err != nil{
+	if err:= r.db.GetContext(ctx, &user, "SELECT * FROM users WHERE user_id = ?", id); err != nil{
 		return model.User{}, err
 	}
 	return user, nil

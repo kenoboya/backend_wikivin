@@ -7,7 +7,7 @@ const (
 )
 
 type Person struct {
-	ID        int     `json:"person_id" db:"person_id"`
+	ID        int     `json:"person_id,omitempty" db:"person_id"`
 	UserID    int     `json:"user_id,omitempty" db:"user_id"`
 	FirstName string  `json:"first_name" db:"first_name"`
 	LastName  string  `json:"last_name" db:"last_name"`

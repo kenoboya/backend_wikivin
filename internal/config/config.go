@@ -24,7 +24,8 @@ type AuthConfig struct{
 type JWTConfig struct{
 	AccessTokenTTL time.Duration `mapstructure:"accessTokenTTL"`
 	RefreshTokenTTL time.Duration `mapstructure:"refreshTokenTTL"`
-	SecretKey string
+	SecretAccessKey string
+	SecretRefreshKey string
 }
 
 type HTTPConfig struct {
@@ -52,7 +53,7 @@ func unmarshal(config *Config) error{
 	if err:= viper.UnmarshalKey("http", &config.HTTP); err != nil{
 		return err
 	}
-	if err:= viper.UnmarshalKey("auth", &config.HTTP); err != nil{
+	if err:= viper.UnmarshalKey("auth", &config.Auth.JWT); err != nil{
 		return err
 	}
 	return nil
@@ -68,7 +69,8 @@ func setFromEnv(config *Config) error{
 	}
 
 	config.Auth.PasswordSalt = os.Getenv("PASSWORD_SALT")
-	config.Auth.JWT.SecretKey = os.Getenv("SECRET_KEY")
+	config.Auth.JWT.SecretAccessKey = os.Getenv("SECRET_ACCESS_KEY")
+	config.Auth.JWT.SecretRefreshKey = os.Getenv("SECRET_REFRESH_KEY")
 	
 	return nil
 }

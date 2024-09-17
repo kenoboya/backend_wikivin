@@ -30,12 +30,15 @@ func (s *UsersService) GetRefreshTokenTTL() time.Duration{
 }
 
 func NewUsersService(userRepo repo.Users, peopleRepo repo.People, 
-	hasher hash.PasswordHasher, tokenManager auth.TokenManager) *UsersService {
+	hasher hash.PasswordHasher, tokenManager auth.TokenManager,
+	accessTokenTTL time.Duration, refreshTokenTTL time.Duration) *UsersService {
 	return &UsersService{
 		userRepo: userRepo,
 		peopleRepo: peopleRepo,
 		hasher: hasher,
 		tokenManager: tokenManager,
+		accessTokenTTL: accessTokenTTL,
+		refreshTokenTTL: refreshTokenTTL,
 	}
 }
 
@@ -81,11 +84,11 @@ func (s *UsersService) RefreshToken(ctx context.Context, refreshToken string) (m
 	if res.RefreshToken, err = s.tokenManager.RefreshToken(refreshToken, s.refreshTokenTTL); err != nil{
 		return model.Tokens{}, err
 	}
-	claims, err:= s.tokenManager.ParseToken(res.RefreshToken)
+	claims, err:= s.tokenManager.ParseToken(res.RefreshToken, auth.RefreshToken)
 	if err != nil{
 		return model.Tokens{}, err
 	}
-	if res.AccessToken, err = s.tokenManager.NewJWT(claims.UserID, claims.Role, s.accessTokenTTL); err!= nil{
+	if res.AccessToken, err = s.tokenManager.NewJWT(claims.UserID, claims.Role, s.accessTokenTTL, auth.AccessToken); err!= nil{
 		return model.Tokens{}, err
 	}
 	return res, nil
@@ -96,13 +99,21 @@ func (s *UsersService) createSession(ctx context.Context, user *model.User) (mod
 		res model.Tokens
 		err error
 	)	
-	res.AccessToken, err = s.tokenManager.NewJWT(user.ID, user.Role, s.accessTokenTTL)
+	res.AccessToken, err = s.tokenManager.NewJWT(user.ID, user.Role, s.accessTokenTTL, auth.AccessToken)
 	if err != nil{
 		return model.Tokens{}, err
 	}
-	res.RefreshToken, err = s.tokenManager.NewJWT(user.ID, user.Role, s.refreshTokenTTL)
+	res.RefreshToken, err = s.tokenManager.NewJWT(user.ID, user.Role, s.refreshTokenTTL, auth.RefreshToken)
 	if err != nil{
 		return model.Tokens{}, err
 	}
 	return res, nil
+}
+
+func (s *UsersService) GetUserIDFromToken(ctx context.Context, token string, tokenType string) (int, error){
+	claims, err:= s.tokenManager.ParseToken(token, tokenType)
+	if err != nil{
+		return -1, err
+	}
+	return claims.UserID, nil
 }

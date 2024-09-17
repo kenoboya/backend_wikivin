@@ -13,7 +13,8 @@ import (
 
 type Services struct {
 	Articles Articles
-	User User
+	Users Users
+	Profiles Profiles
 }
 
 func NewServices(deps Deps)*Services{
@@ -23,11 +24,16 @@ func NewServices(deps Deps)*Services{
 			deps.repo.Chapters, 
 			deps.repo.InfoBox,
 		),
-		User: NewUsersService(
+		Users: NewUsersService(
 			deps.repo.Users,
 			deps.repo.People,
 			deps.hasher,
 			deps.tokenManager,
+			deps.accessTokenTTL,
+			deps.refreshTokenTTL,
+		),
+		Profiles: NewProfileService(
+			deps.repo.Profiles,
 		),
 	}
 }
@@ -42,7 +48,7 @@ type Deps struct{
 
 func NewDeps(repo *repo.Repositories, config config.AuthConfig)(*Deps, error){
 	hasher:= hash.NewSHA256Hasher(config.PasswordSalt)
-	tokenManager, err:= auth.NewManager(config.JWT.SecretKey)
+	tokenManager, err:= auth.NewManager(config.JWT.SecretAccessKey, config.JWT.SecretRefreshKey)
 	if err != nil{
 		return nil, fmt.Errorf("tokenManager: %w", err)
 	}
@@ -61,11 +67,16 @@ type Articles interface {
 	LoadArticle(ctx context.Context, title string) (*model.ArticlePage, error)
 }
 
-type User interface{
+type Users interface{
 	SignUp(ctx context.Context, requestSignUp model.RequestSignUp)(model.Tokens, error)
 	SignIn(ctx context.Context, requestSignIn model.UserSignIn)(model.Tokens, error)
 	RefreshToken(ctx context.Context, refreshToken string)(model.Tokens, error)
 	
+	GetUserIDFromToken(ctx context.Context, token string, tokenType string) (int, error)
 	GetAccessTokenTTL() time.Duration
 	GetRefreshTokenTTL() time.Duration
+}
+
+type Profiles interface{
+	GetBriefInfoProfile(ctx context.Context, userID int) (model.BriefInfoProfile, error)
 }

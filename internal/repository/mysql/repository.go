@@ -13,6 +13,7 @@ type Repositories struct {
 	InfoBox InfoBox
 	Users Users
 	People People
+	Profiles Profiles
 }
 
 func NewRepositories(db *sqlx.DB) *Repositories{
@@ -22,6 +23,7 @@ func NewRepositories(db *sqlx.DB) *Repositories{
 		InfoBox: NewInfoBoxesRepository(db),
 		Users: NewUsersRepository(db),
 		People: NewPeopleRepository(db),
+		Profiles: NewProfileRepository(db),
 	}
 }
 
@@ -49,4 +51,7 @@ type Users interface{
 }
 type People interface{
 	Create(ctx context.Context, person model.Person) error
+}
+type Profiles interface{
+	GetBriefInfoProfile(ctx context.Context, userID int) (model.BriefInfoProfile, error)
 }

@@ -1,9 +1,9 @@
 http:
-  port: ':8080'
+  port: ":8080"
   maxHeaderBytes: 1
   readTimeout: 10s
   writeTimeout: 10s
 
 auth:
   accessTokenTTL: 15m
-  refreshTokenTTL: 30d
+  refreshTokenTTL: 720h

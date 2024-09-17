@@ -4,13 +4,14 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(70) UNIQUE,
     password VARCHAR(255) NOT NULL,
     status ENUM('active', 'inactive') DEFAULT 'inactive',
-    blocked ENUM('blocked','unblocked') DEFAULT 'unblocked'
+    blocked ENUM('blocked', 'unblocked') DEFAULT 'unblocked',
     registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    last_login DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_login DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     role ENUM('user', 'admin') DEFAULT 'user'
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS person(
+
+CREATE TABLE IF NOT EXISTS people(
     person_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     first_name VARCHAR(50) NOT NULL,
@@ -23,19 +24,19 @@ CREATE TABLE IF NOT EXISTS person(
     FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS favorite_articles (
-    user_id BIGINT NOT NULL,
-    article_id BIGINT NOT NULL,
-    PRIMARY KEY(user_id, article_id),
-    FOREIGN KEY(user_id) REFERENCES user(user_id) ON DELETE CASCADE,
-    FOREIGN KEY(article_id) REFERENCES articles(article_id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS articles (
     article_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(50) UNIQUE,
     lead_section TEXT,
     image LONGTEXT
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS favorite_articles (
+    user_id BIGINT NOT NULL,
+    article_id BIGINT NOT NULL,
+    PRIMARY KEY(user_id, article_id),
+    FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY(article_id) REFERENCES articles(article_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS chapters (
