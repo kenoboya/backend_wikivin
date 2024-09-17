@@ -13,4 +13,5 @@ var (
 	ErrUserBlocked = errors.New("user is blocked")
 	ErrInvalidPassword = errors.New("invalid password")
 	ErrInvalidLogin = errors.New("invalid login")
+	ErrLoginEmpty = errors.New("login cannot be empty")
 )

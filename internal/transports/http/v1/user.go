@@ -14,6 +14,7 @@ func (h *Handler) initUserRoutes(router *gin.RouterGroup){
 		user.POST("/sign-up", h.signUp)
 		user.POST("/sign-in", h.signIn)
 		user.GET("/refresh", h.refresh)
+		user.GET("/sign-out", h.signOut)
 
 		user.GET("/user/profile", h.getBriefInfoProfile)
 
@@ -51,7 +52,6 @@ func (h *Handler) signIn(c *gin.Context){
 		newResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	
 	tokens, err:= h.services.Users.SignIn(c.Request.Context(), userSignIn)
 	if err != nil{
 		newResponse(c, http.StatusBadRequest, err.Error())
@@ -98,4 +98,10 @@ func(h *Handler) getBriefInfoProfile(c *gin.Context){
 		return
 	}
 	c.JSON(http.StatusOK, briefInfoProfile)
+}
+
+func(h *Handler) signOut(c *gin.Context){
+	c.SetCookie("access_token", "", -1, "/", "", false, true)
+	c.SetCookie("refresh_token", "", -1, "/", "", false, true)
+	c.JSON(http.StatusOK, gin.H{"message": "Sign out was successfully"})
 }

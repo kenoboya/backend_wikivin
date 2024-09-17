@@ -36,6 +36,9 @@ func (r *UsersRepository) Create(ctx context.Context, userSignUp model.UserSignU
 
 func (r *UsersRepository) GetByLogin(ctx context.Context, login string) (model.User, error){
 	var user model.User
+	if login == "" {
+		return model.User{}, model.ErrLoginEmpty
+	}
 	query:= "SELECT * FROM users WHERE email = ? OR username = ?"
 	if err:= r.db.GetContext(ctx, &user, query, login, login); err != nil{
 		return model.User{}, err
