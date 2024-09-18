@@ -87,4 +87,6 @@ type Profiles interface{
 
 type Favorites interface{
 	GetFavoriteArticlesByUserID(ctx context.Context, userID int)([]model.FavoriteArticle, error)
+	AddFavorite(ctx context.Context, userID int, articleID int)error
+	DeleteFavorite(ctx context.Context, userID int, articleID int)error
 }

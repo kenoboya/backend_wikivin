@@ -3,7 +3,7 @@
     "Article": {
       "Title": "Князь Василько",
       "Description": "Князь Василько був одним з перших князів Поділля, який правив у 11-12 століттях.",
-      "Image": "https://upload.wikimedia.org/wikipedia/uk/7/76/%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8C%D0%BA%D0%BE_%D0%A0%D0%BE%D0%BC%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%87.jpg"
+      "Image": "https://upload.wikimedia.org/wikipedia/uk/7/76/%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D1%8C%D0%BA%D0%BE_%D0%A0%D0%BE%D0%BC%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%87.jpg",
       "Author_id": 1
     },
     "Chapters": [
@@ -61,7 +61,7 @@
     "Article": {
       "Title": "Князь Мстислав",
       "Description": "Князь Мстислав правив у 12 столітті, активно займаючись розширенням своїх володінь.",
-      "Image": "https://upload.wikimedia.org/wikipedia/commons/6/69/Mstislav_I_of_Kiev_%28Tsarskiy_titulyarnik%29.jpg"
+      "Image": "https://upload.wikimedia.org/wikipedia/commons/6/69/Mstislav_I_of_Kiev_%28Tsarskiy_titulyarnik%29.jpg",
       "Author_id": 1
     },
     "Chapters": [
@@ -126,7 +126,7 @@
     "Article": {
       "Title": "Князь Юрій",
       "Description": "Князь Юрій був правителем Поділля в середині 12 століття.",
-      "Image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR4afKtBlufaY-D0YNWeLjtLyvDN8tx95Kaw&s"
+      "Image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR4afKtBlufaY-D0YNWeLjtLyvDN8tx95Kaw&s",
       "Author_id": 1
     },
     "Chapters": [
@@ -209,7 +209,7 @@
     "Article": {
       "Title": "Князь Роман",
       "Description": "Князь Роман правив у кінці 12 – початку 13 століття, активно боронився проти татар.",
-      "Image": "https://day.kyiv.ua/sites/default/files/uz151/20mstislavovich.jpg"
+      "Image": "https://day.kyiv.ua/sites/default/files/uz151/20mstislavovich.jpg",
       "Author_id": 1
     },
     "Chapters": [
@@ -274,7 +274,7 @@
     "Article": {
       "Title": "Князь Михайло",
       "Description": "Князь Михайло правив у середині 13 століття, його правління відзначалося частими конфліктами.",
-      "Image": "https://uspinnia.org.ua/wp-content/uploads/mihail_chernigovsk.jpg"
+      "Image": "https://uspinnia.org.ua/wp-content/uploads/mihail_chernigovsk.jpg",
       "Author_id": 1
     },
     "Chapters": [
@@ -333,7 +333,7 @@
     "Article": {
       "Title": "Князь Дмитро",
       "Description": "Князь Дмитро був одним з останніх князів Поділля перед його завоюванням іншими силами.",
-      "Image": "https://pz.vntu.edu.ua/media/uploads/user/35/prew/m3hf0zlcus5njkwo.jpg"
+      "Image": "https://pz.vntu.edu.ua/media/uploads/user/35/prew/m3hf0zlcus5njkwo.jpg",
       "Author_id": 1
     },
     "Chapters": [

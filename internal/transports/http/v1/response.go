@@ -2,8 +2,8 @@ package v1
 
 import "github.com/gin-gonic/gin"
 
-type iDResponse struct{
-	ID int `json:"id"`
+type IDResponse struct{
+	ID int
 }
 
 type response struct{

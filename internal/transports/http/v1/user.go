@@ -16,8 +16,10 @@ func (h *Handler) initUserRoutes(router *gin.RouterGroup){
 		user.GET("/refresh", h.refresh)
 		user.GET("/sign-out", h.signOut)
 
+		user.POST("/favorite/articles", h.addFavorite)
+		user.DELETE("/favorite/articles", h.deleteFavorite)
 		user.GET("/user/profile", h.getBriefInfoProfile)
-		user.GET("/favorite-article", h.getFavoriteArticles)
+		user.GET("/favorite/articles", h.getFavoriteArticles)
 
 		// user.GET("/profile/:username", h.userProfile)
 		// user.PUT("/profile", h.updateUserProfile)
@@ -124,4 +126,51 @@ func (h *Handler) getFavoriteArticles(c *gin.Context){
 		return
 	}
 	c.JSON(http.StatusOK, favoriteArticles)
+}
+
+func (h *Handler) addFavorite(c *gin.Context){
+	var articleID int
+	if err:= c.BindJSON(&articleID); err!= nil{
+		newResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	token, err:= c.Cookie("access_token")
+	if err != nil{
+		newResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	userID, err:= h.services.Users.GetUserIDFromToken(c.Request.Context(), token, auth.AccessToken)
+	if err != nil{
+		newResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	if err:= h.services.Favorites.AddFavorite(c.Request.Context(), userID, articleID); err != nil{
+		newResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Favorite was created successfully"})
+}
+
+func (h *Handler) deleteFavorite(c *gin.Context){
+	var articleID int
+	if err:= c.BindJSON(&articleID); err!= nil{
+		newResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	token, err:= c.Cookie("access_token")
+	if err != nil{
+		newResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	userID, err:= h.services.Users.GetUserIDFromToken(c.Request.Context(), token, auth.AccessToken)
+	if err != nil{
+		newResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	if err:= h.services.Favorites.DeleteFavorite(c.Request.Context(), userID, articleID); err != nil{
+		newResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Favorite was deleted successfully"})
 }

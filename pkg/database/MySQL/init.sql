@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS people(
 
 CREATE TABLE IF NOT EXISTS articles (
     article_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    author_id BIGINT NOT NULL
+    author_id BIGINT NOT NULL,
     title VARCHAR(50) UNIQUE,
     description TEXT,
     image LONGTEXT,
