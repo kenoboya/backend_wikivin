@@ -16,9 +16,9 @@ func NewArticlesRepository (db *sqlx.DB) *ArticlesRepository{
 }
 
 func (r *ArticlesRepository) Create(ctx context.Context, article model.Article) (int, error) {
-    query := `INSERT INTO articles (title, lead_section, image) VALUES (?, ?, ?)`
+    query := `INSERT INTO articles (title, description, image, author_id) VALUES (?, ?, ?, ?)`
 
-    result, err := r.db.ExecContext(ctx, query, article.Title, article.LeadSection, article.Image)
+    result, err := r.db.ExecContext(ctx, query, article.Title, article.Description, article.Image, article.AuthorID)
     if err != nil {
         return -1, err
     }
@@ -33,7 +33,7 @@ func (r *ArticlesRepository) Create(ctx context.Context, article model.Article) 
 
 func (r *ArticlesRepository)GetArticles(ctx context.Context) ([]model.Article, error){
 	var articles []model.Article
-	query:= "SELECT article_id,title, lead_section, image FROM articles"
+	query:= "SELECT article_id, title, description, image, author_id FROM articles"
 	err:= r.db.Select(&articles, query)
 	if err!= nil{
 		return articles, err

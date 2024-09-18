@@ -14,6 +14,7 @@ type Repositories struct {
 	Users Users
 	People People
 	Profiles Profiles
+	Favorites Favorites
 }
 
 func NewRepositories(db *sqlx.DB) *Repositories{
@@ -24,6 +25,7 @@ func NewRepositories(db *sqlx.DB) *Repositories{
 		Users: NewUsersRepository(db),
 		People: NewPeopleRepository(db),
 		Profiles: NewProfileRepository(db),
+		Favorites: NewFavoriteRepository(db),
 	}
 }
 
@@ -54,4 +56,7 @@ type People interface{
 }
 type Profiles interface{
 	GetBriefInfoProfile(ctx context.Context, userID int) (model.BriefInfoProfile, error)
+}
+type Favorites interface{
+	GetFavoriteArticlesByUserID(ctx context.Context, userID int)([]model.FavoriteArticle, error)
 }

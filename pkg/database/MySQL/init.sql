@@ -26,9 +26,11 @@ CREATE TABLE IF NOT EXISTS people(
 
 CREATE TABLE IF NOT EXISTS articles (
     article_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    author_id BIGINT NOT NULL
     title VARCHAR(50) UNIQUE,
-    lead_section TEXT,
-    image LONGTEXT
+    description TEXT,
+    image LONGTEXT,
+    FOREIGN KEY(author_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS favorite_articles (

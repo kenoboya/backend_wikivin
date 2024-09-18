@@ -17,6 +17,7 @@ func (h *Handler) initUserRoutes(router *gin.RouterGroup){
 		user.GET("/sign-out", h.signOut)
 
 		user.GET("/user/profile", h.getBriefInfoProfile)
+		user.GET("/favorite-article", h.getFavoriteArticles)
 
 		// user.GET("/profile/:username", h.userProfile)
 		// user.PUT("/profile", h.updateUserProfile)
@@ -104,4 +105,23 @@ func(h *Handler) signOut(c *gin.Context){
 	c.SetCookie("access_token", "", -1, "/", "", false, true)
 	c.SetCookie("refresh_token", "", -1, "/", "", false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "Sign out was successfully"})
+}
+
+func (h *Handler) getFavoriteArticles(c *gin.Context){
+	token, err:= c.Cookie("access_token")
+	if err != nil{
+		newResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	userID, err:= h.services.Users.GetUserIDFromToken(c.Request.Context(), token, auth.AccessToken)
+	if err != nil{
+		newResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	favoriteArticles, err:= h.services.Favorites.GetFavoriteArticlesByUserID(c.Request.Context(), userID)
+	if err != nil{
+		newResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, favoriteArticles)
 }

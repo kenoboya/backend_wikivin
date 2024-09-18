@@ -15,6 +15,7 @@ type Services struct {
 	Articles Articles
 	Users Users
 	Profiles Profiles
+	Favorites Favorites
 }
 
 func NewServices(deps Deps)*Services{
@@ -34,6 +35,9 @@ func NewServices(deps Deps)*Services{
 		),
 		Profiles: NewProfileService(
 			deps.repo.Profiles,
+		),
+		Favorites: NewFavoritesService(
+			deps.repo.Favorites,
 		),
 	}
 }
@@ -79,4 +83,8 @@ type Users interface{
 
 type Profiles interface{
 	GetBriefInfoProfile(ctx context.Context, userID int) (model.BriefInfoProfile, error)
+}
+
+type Favorites interface{
+	GetFavoriteArticlesByUserID(ctx context.Context, userID int)([]model.FavoriteArticle, error)
 }
