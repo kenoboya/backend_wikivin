@@ -1,4 +1,4 @@
+.uploads/
 .env
-.uploads
-.vscode
-.tools
+.vscode/
+.tools/
