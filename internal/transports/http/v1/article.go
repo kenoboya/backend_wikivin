@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 	"wikivin/internal/model"
+	"wikivin/pkg/auth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,13 +13,24 @@ import (
 func (h *Handler) initArticlesRoutes(router *gin.RouterGroup){
 	article:= router.Group("/articles")
 	{
-		article.POST("/create", h.CreateArticle)
+		article.POST("/create",h.AuthMiddleware(), h.CreateArticle)
 		article.GET("/:title", h.LoadArticle)
 		article.GET("", h.LoadArticlesBriefInfo)
 	}
 }
 
 func (h *Handler) CreateArticle(c *gin.Context){
+	token, err:= c.Cookie("access_token")
+	if err != nil{
+		newResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	authorID, err:= h.services.Users.GetUserIDFromToken(c.Request.Context(), token, auth.AccessToken)
+	if err != nil{
+		newResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+	
 	var raw map[string]interface{}
 	if err:= json.NewDecoder(c.Request.Body).Decode(&raw); err!= nil{
 		newResponse(c, http.StatusBadRequest, err.Error())
@@ -64,6 +76,8 @@ func (h *Handler) CreateArticle(c *gin.Context){
         newResponse(c, http.StatusBadRequest, err.Error())
         return
     }
+
+	article.AuthorID = authorID
 
 	var chapters []model.Chapter
 	chaptersData, ok := raw["Chapters"].([]interface{})

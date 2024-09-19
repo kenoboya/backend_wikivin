@@ -121,3 +121,7 @@ func (s *UsersService) GetUserIDFromToken(ctx context.Context, token string, tok
 	}
 	return claims.UserID, nil
 }
+
+func (s *UsersService) Verify(accessToken string) error{
+	return s.tokenManager.VerifyToken(accessToken, auth.AccessToken)
+}

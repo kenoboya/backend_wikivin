@@ -15,6 +15,9 @@ func (h *Handler) initUserRoutes(router *gin.RouterGroup){
 		user.POST("/sign-in", h.signIn)
 		user.GET("/refresh", h.refresh)
 		user.GET("/sign-out", h.signOut)
+		user.GET("/verify", h.AuthMiddleware(),func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{"message": "Authenticated"})
+		})
 
 		user.POST("/favorite/articles", h.addFavorite)
 		user.DELETE("/favorite/articles", h.deleteFavorite)
@@ -83,6 +86,7 @@ func (h *Handler) refresh(c *gin.Context){
 	c.SetCookie("refresh_token", tokens.RefreshToken, int(h.services.Users.GetRefreshTokenTTL().Seconds()), "/", "localhost", false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "Token refreshed successfully"})
 }
+
 
 func(h *Handler) getBriefInfoProfile(c *gin.Context){
 	token, err:= c.Cookie("access_token")

@@ -75,6 +75,7 @@ type Users interface{
 	SignUp(ctx context.Context, requestSignUp model.RequestSignUp)(model.Tokens, error)
 	SignIn(ctx context.Context, requestSignIn model.UserSignIn)(model.Tokens, error)
 	RefreshToken(ctx context.Context, refreshToken string)(model.Tokens, error)
+	Verify(accessToken string) error
 	
 	GetUserIDFromToken(ctx context.Context, token string, tokenType string) (int, error)
 	GetAccessTokenTTL() time.Duration
