@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"time"
 	"wikivin/internal/model"
 	repo "wikivin/internal/repository/mysql"
@@ -83,16 +82,13 @@ func (s *UsersService) RefreshToken(ctx context.Context, refreshToken string) (m
 		err error
 	)
 	if res.RefreshToken, err = s.tokenManager.RefreshToken(refreshToken, s.refreshTokenTTL); err != nil{
-		fmt.Println("1TOKEN ERR ", err)
 		return model.Tokens{}, err
 	}
 	claims, err:= s.tokenManager.ParseToken(res.RefreshToken, auth.RefreshToken)
 	if err != nil{
-		fmt.Println("2TOKEN ERR ", err)
 		return model.Tokens{}, err
 	}
 	if res.AccessToken, err = s.tokenManager.NewJWT(claims.UserID, claims.Role, s.accessTokenTTL, auth.AccessToken); err!= nil{
-		fmt.Println("3TOKEN ERR ", err)
 		return model.Tokens{}, err
 	}
 	return res, nil

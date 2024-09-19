@@ -14,4 +14,7 @@ var (
 	ErrInvalidPassword = errors.New("invalid password")
 	ErrInvalidLogin = errors.New("invalid login")
 	ErrLoginEmpty = errors.New("login cannot be empty")
+	ErrNotImageUploaded = errors.New("no image uploaded")
+	ErrSaveFile = errors.New("could not save file")
+	ErrJSONData = errors.New("no JSON data found")
 )

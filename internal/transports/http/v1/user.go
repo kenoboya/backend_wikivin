@@ -1,16 +1,23 @@
 package v1
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
+	"path/filepath"
 	"wikivin/internal/model"
 	"wikivin/pkg/auth"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/exp/rand"
 )
 
 func (h *Handler) initUserRoutes(router *gin.RouterGroup){
 	user := router.Group("")
 	{
+		user.Static("/static/articles/", "uploads/images/articles/")
+		user.Static("/static/avatars/", "uploads/images/avatars/")
+
 		user.POST("/sign-up", h.signUp)
 		user.POST("/sign-in", h.signIn)
 		user.GET("/refresh", h.refresh)
@@ -36,12 +43,39 @@ func (h *Handler) initUserRoutes(router *gin.RouterGroup){
 }
 
 func (h *Handler) signUp(c *gin.Context){
-	var requestSignUp  model.RequestSignUp 
-	if err:= c.BindJSON(&requestSignUp); err!= nil{
-		newResponse(c, http.StatusBadRequest, err.Error())
+	file, err := c.FormFile("image")
+    if err != nil {
+        newResponse(c, http.StatusBadRequest, model.ErrNotImageUploaded.Error())
+        return
+    }
+
+	photoURL := fmt.Sprintf("%d_%s", rand.Int63(), file.Filename)
+	uploadPath := filepath.Join("/root/uploads/images/avatars", photoURL)
+	if err := c.SaveUploadedFile(file, uploadPath); err != nil {
+		newResponse(c, http.StatusInternalServerError, model.ErrSaveFile.Error())
 		return
 	}
-	
+	photoURL = "/static/avatars/" + photoURL
+
+	form, err := c.MultipartForm()
+    if err != nil {
+        newResponse(c, http.StatusBadRequest, err.Error())
+        return
+    }
+
+    jsonData := form.Value["data"]
+    if len(jsonData) == 0 {
+        newResponse(c, http.StatusBadRequest, model.ErrJSONData.Error())
+        return
+    }
+
+    var requestSignUp model.RequestSignUp
+    if err := json.Unmarshal([]byte(jsonData[0]), &requestSignUp); err != nil {
+        newResponse(c, http.StatusBadRequest, err.Error())
+        return
+    }
+
+	requestSignUp.Person.Image = &photoURL
 	tokens, err:= h.services.Users.SignUp(c.Request.Context(), requestSignUp)
 	if err != nil{
 		newResponse(c, http.StatusBadRequest, err.Error())

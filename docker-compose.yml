@@ -19,6 +19,7 @@ services:
     volumes:
       - ./configs:/configs
       - .env:/root/.env
+      - ./uploads:/root/uploads
 
   mysql:
     build:

@@ -2,7 +2,6 @@ package repo
 
 import (
 	"context"
-	"fmt"
 	"wikivin/internal/model"
 
 	"github.com/jmoiron/sqlx"
@@ -25,7 +24,6 @@ func (r *ProfileRepository) GetBriefInfoProfile(ctx context.Context, userID int)
 		WHERE p.user_id = ?`
 	err := r.db.Get(&briefInfoProfile, query, userID)
 	if err != nil {
-		fmt.Println(err)
 		return model.BriefInfoProfile{}, err
 	}
 	return briefInfoProfile, nil

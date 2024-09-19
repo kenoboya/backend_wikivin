@@ -15,5 +15,5 @@ type Person struct {
 	Gender    string  `json:"gender" db:"gender"`
 	County    *string `json:"country" db:"country"`
 	City      *string `json:"city" db:"city"`
-	Image     *string `json:"image" db:"image"`
+	Image     *string `json:"image,omitempty" db:"image"`
 }
