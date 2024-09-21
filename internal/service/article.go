@@ -26,7 +26,7 @@ func (s *ArticlesService) CreateArticle(ctx context.Context, infoBoxDB model.Inf
 	if err != nil{
 		return err
 	}
-	if err:= s.infoBoxRepo.Create(ctx,articleID, infoBoxID); err!= nil{
+	if err:= s.infoBoxRepo.Create(ctx,articleID, infoBoxDB.InfoBoxType, infoBoxID); err!= nil{
 		return err
 	}
 	if err:= s.unbuildHierarchyWithRequestToDB(ctx, articleID, chapters); err != nil{

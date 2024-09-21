@@ -64,7 +64,7 @@ type CompanyInfoBox struct {
 type EventInfoBox struct {
     ID               int        `json:"event_info_box_id" db:"event_info_box_id"`
     Title            *string    `json:"title" db:"title"`
-    Date             *string `json:"date" db:"date"`
+    Date             *string    `json:"date" db:"date"`
     Locations        *string    `json:"locations" db:"locations"`
     Organizers       *string    `json:"organizers" db:"organizers"`
     Attendance       *int       `json:"attendance" db:"attendance"`

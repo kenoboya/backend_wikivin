@@ -41,7 +41,7 @@ type Chapters interface {
 }
 
 type InfoBox interface{
-	Create(ctx context.Context, articleID int, infoBoxID int) error
+	Create(ctx context.Context, articleID int, infoboxType string, infoBoxID int) error
 	CreateInfoBoxByType(ctx context.Context, infoBoxDB model.InfoBoxDB) (int, error)
 	GetTypeAndObjectInfoBoxByArticleID(ctx context.Context, articleID int) (string, int, error)
 	GetInfoBoxByObjectInfoBoxIDAndType(ctx context.Context, ObjectInfoBoxID int, infoBoxType string) (model.InfoBox, error)

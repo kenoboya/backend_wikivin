@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS people(
 CREATE TABLE IF NOT EXISTS articles (
     article_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     author_id BIGINT NOT NULL,
-    title VARCHAR(50) UNIQUE,
+    title VARCHAR(150) UNIQUE,
     description TEXT,
     image LONGTEXT,
     FOREIGN KEY(author_id) REFERENCES users(user_id) ON DELETE CASCADE

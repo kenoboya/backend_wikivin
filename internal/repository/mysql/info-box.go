@@ -22,9 +22,9 @@ func NewInfoBoxesRepository(db *sqlx.DB) *InfoBoxesRepository{
 
 
 
-func (r *InfoBoxesRepository) Create(ctx context.Context, articleID int, infoBoxID int) error {
-    query := "INSERT INTO info_box (article_id, object_info_box_id) VALUES (?, ?)"
-    if _, err := r.db.ExecContext(ctx, query, articleID, infoBoxID); err != nil {
+func (r *InfoBoxesRepository) Create(ctx context.Context, articleID int, infoboxType string, infoBoxID int) error {
+    query := "INSERT INTO info_box (article_id, type, object_info_box_id) VALUES (?, ?, ?)"
+    if _, err := r.db.ExecContext(ctx, query, articleID, infoboxType, infoBoxID); err != nil {
         return err
     }
     return nil

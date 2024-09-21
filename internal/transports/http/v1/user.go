@@ -43,19 +43,18 @@ func (h *Handler) initUserRoutes(router *gin.RouterGroup){
 }
 
 func (h *Handler) signUp(c *gin.Context){
+	var requestSignUp model.RequestSignUp
 	file, err := c.FormFile("image")
-    if err != nil {
-        newResponse(c, http.StatusBadRequest, model.ErrNotImageUploaded.Error())
-        return
+    if err == nil {
+		photoURL := fmt.Sprintf("%d_%s", rand.Int63(), file.Filename)
+		uploadPath := filepath.Join("/root/uploads/images/avatars", photoURL)
+		if err := c.SaveUploadedFile(file, uploadPath); err != nil {
+			newResponse(c, http.StatusInternalServerError, model.ErrSaveFile.Error())
+			return
+		}
+		photoURL = "/static/avatars/" + photoURL
+		requestSignUp.Person.Image = &photoURL
     }
-
-	photoURL := fmt.Sprintf("%d_%s", rand.Int63(), file.Filename)
-	uploadPath := filepath.Join("/root/uploads/images/avatars", photoURL)
-	if err := c.SaveUploadedFile(file, uploadPath); err != nil {
-		newResponse(c, http.StatusInternalServerError, model.ErrSaveFile.Error())
-		return
-	}
-	photoURL = "/static/avatars/" + photoURL
 
 	form, err := c.MultipartForm()
     if err != nil {
@@ -69,13 +68,11 @@ func (h *Handler) signUp(c *gin.Context){
         return
     }
 
-    var requestSignUp model.RequestSignUp
     if err := json.Unmarshal([]byte(jsonData[0]), &requestSignUp); err != nil {
         newResponse(c, http.StatusBadRequest, err.Error())
         return
     }
 
-	requestSignUp.Person.Image = &photoURL
 	tokens, err:= h.services.Users.SignUp(c.Request.Context(), requestSignUp)
 	if err != nil{
 		newResponse(c, http.StatusBadRequest, err.Error())
